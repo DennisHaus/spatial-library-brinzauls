@@ -6906,7 +6906,7 @@ function fitBounds(
     Camera field of view.
   */
   var fov =
-    60;
+    50;
 
   if (
     typeof viewer.getFOV ===
@@ -6923,7 +6923,7 @@ function fitBounds(
     fov <= 0
   ) {
     fov =
-      60;
+      50;
   }
 
   var verticalFov =
