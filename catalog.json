@@ -156,18 +156,6 @@
       "pointCount": null,
       "crs": null,
       "uploadedAt": "2026-10-01"
-    },
-    {
-      "id": "scans-werdhoelzli",
-      "name": "Werdhoelzli",
-      "filename": "werdhoelzli.copc.laz",
-      "path": "./scans/werdhoelzli.copc.laz",
-      "url": "./scans/werdhoelzli.copc.laz",
-      "format": "copc",
-      "sizeBytes": 66732294,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-05"
     }
   ]
 }
