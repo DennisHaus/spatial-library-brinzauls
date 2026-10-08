@@ -1,5 +1,5 @@
 window.LOCATION_CONFIG = {
-  pageTitle: "Spatial Library Blatten",
+  pageTitle: "Spatial Library Brinzauls",
 
   metaDescription:
     "Cloud optimized point cloud viewer for Brienz/Brinzauls scans.",
@@ -39,7 +39,10 @@ window.LOCATION_CONFIG = {
     , Kyoto Design Lab
   `,
 
-  startView: null,
+  startView: {
+  position: [607.803, -614.757, 1336.936],
+  target: [5.885, -75.285, 1176.3]
+},
 
   navigationMode: "fly",
 
