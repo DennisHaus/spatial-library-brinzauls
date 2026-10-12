@@ -37,7 +37,7 @@ var CONFIG = {
     visitor chose is remembered in their browser.
   */
   navigationMode:
-    "fly",
+    "orbit",
 
   /* How far the view turns per pixel of mouse drag */
   lookSensitivity:
