@@ -47,7 +47,7 @@ window.LOCATION_CONFIG = {
   navigationMode: "fly",
 
   uploadUrl:
-    "https://github.com/DennisHaus/spatial-library-blatten/upload/main/scans",
+    "https://github.com/DennisHaus/spatial-library-brinzauls/upload/main/scans",
 
   readmeTitle: "Spatial Library - Read Me",
 
