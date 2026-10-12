@@ -134,18 +134,6 @@
       "uploadedAt": "2026-10-01"
     },
     {
-      "id": "scans-studentgroup1-hoenngerberg-shift",
-      "name": "Hoenngerberg Shift",
-      "filename": "hoenngerberg_shift.copc.laz",
-      "path": "./scans/StudentGroup1/hoenngerberg_shift.copc.laz",
-      "url": "./scans/StudentGroup1/hoenngerberg_shift.copc.laz",
-      "format": "copc",
-      "sizeBytes": 83224743,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-12"
-    },
-    {
       "id": "scans-studentgroup1-stallikon-15mio",
       "name": "Stallikon 15mio",
       "filename": "stallikon_15mio.copc.laz",
