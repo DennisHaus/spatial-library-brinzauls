@@ -194,8 +194,13 @@
       "sizeBytes": 1183,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-14"
+      "uploadedAt": "2026-10-14",
+      "location": [
+        156.83,
+        -128.09,
+        1142.34
+      ]
     }
   ],
-  "locationsApplied": "2026-10-14-144146.json"
+  "locationsApplied": "2026-10-14-154705.json"
 }
