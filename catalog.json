@@ -124,7 +124,12 @@
       "sizeBytes": 63653801,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-02"
+      "uploadedAt": "2026-10-02",
+      "location": [
+        71.76,
+        -174.49,
+        1137.71
+      ]
     },
     {
       "id": "scans-studentgroup1-brinzauls-under-landslide",
@@ -180,5 +185,5 @@
       "uploadedAt": "2026-10-01"
     }
   ],
-  "locationsApplied": "2026-10-14-140240.json"
+  "locationsApplied": "2026-10-14-144146.json"
 }
