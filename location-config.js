@@ -44,7 +44,7 @@ window.LOCATION_CONFIG = {
   target: [5.885, -75.285, 1176.3]
 },
 
-  navigationMode: "fly",
+  navigationMode: "orbit",
 
   uploadUrl:
     "https://github.com/DennisHaus/spatial-library-brinzauls/upload/main/scans",
