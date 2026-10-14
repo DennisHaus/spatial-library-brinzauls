@@ -1164,12 +1164,15 @@ function isImageScan(scan) {
     format === "video" ||
     format === "mp3" ||
     format === "wav" ||
-    format === "audio"
+    format === "audio" ||
+    format === "txt" ||
+    format === "md" ||
+    format === "text"
   ) {
     return true;
   }
 
-  return /\.(jpg|jpeg|png|mp4|mov|mp3|wav)(\?.*)?$/i.test(
+  return /\.(jpg|jpeg|png|mp4|mov|mp3|wav|txt|md)(\?.*)?$/i.test(
     scan.url ||
     scan.path ||
     scan.filename ||
@@ -1202,6 +1205,224 @@ function isAudioScan(scan) {
     scan.filename ||
     ""
   );
+}
+
+function isTextScan(scan) {
+  if (!scan) {
+    return false;
+  }
+
+  var format =
+    String(
+      scan.format ||
+      ""
+    ).toLowerCase();
+
+  if (
+    format === "txt" ||
+    format === "md" ||
+    format === "text"
+  ) {
+    return true;
+  }
+
+  return /\.(txt|md)(\?.*)?$/i.test(
+    scan.url ||
+    scan.path ||
+    scan.filename ||
+    ""
+  );
+}
+
+function isMarkdownScan(scan) {
+  return (
+    String(scan.format || "").toLowerCase() === "md" ||
+    /\.md(\?.*)?$/i.test(
+      scan.url ||
+      scan.path ||
+      scan.filename ||
+      ""
+    )
+  );
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/*
+  Small Markdown renderer for text popups: headings, paragraphs,
+  bold, italic, inline code, code blocks, lists, quotes, links and
+  horizontal rules. All text is escaped first, so a file cannot
+  inject HTML or scripts.
+*/
+function renderMarkdown(source) {
+  function inline(text) {
+    return escapeHtml(text)
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
+      .replace(
+        /\[([^\]]+)\]\(((?:https?:\/\/|\.?\.?\/)?[^\s)]+)\)/g,
+        function (match, label, url) {
+          if (/^\s*javascript:/i.test(url)) {
+            return label;
+          }
+
+          return (
+            '<a href="' + url + '" target="_blank" rel="noopener">' +
+            label +
+            "</a>"
+          );
+        }
+      );
+  }
+
+  var lines =
+    String(source).replace(/\r\n?/g, "\n").split("\n");
+
+  var html = [];
+  var paragraph = [];
+  var list = null;
+  var inCode = false;
+  var code = [];
+
+  function flushParagraph() {
+    if (paragraph.length) {
+      html.push("<p>" + inline(paragraph.join(" ")) + "</p>");
+      paragraph = [];
+    }
+  }
+
+  function flushList() {
+    if (list) {
+      html.push(
+        "<" + list.type + ">" +
+        list.items.map(function (item) {
+          return "<li>" + inline(item) + "</li>";
+        }).join("") +
+        "</" + list.type + ">"
+      );
+      list = null;
+    }
+  }
+
+  lines.forEach(function (line) {
+    if (/^\s*```/.test(line)) {
+      if (inCode) {
+        html.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>");
+        code = [];
+        inCode = false;
+      } else {
+        flushParagraph();
+        flushList();
+        inCode = true;
+      }
+      return;
+    }
+
+    if (inCode) {
+      code.push(line);
+      return;
+    }
+
+    var heading =
+      line.match(/^(#{1,6})\s+(.*)$/);
+
+    var bullet =
+      line.match(/^\s*[-*+]\s+(.*)$/);
+
+    var numbered =
+      line.match(/^\s*\d+[.)]\s+(.*)$/);
+
+    if (!line.trim()) {
+      flushParagraph();
+      flushList();
+    } else if (heading) {
+      flushParagraph();
+      flushList();
+      html.push(
+        "<h" + heading[1].length + ">" +
+        inline(heading[2]) +
+        "</h" + heading[1].length + ">"
+      );
+    } else if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
+      flushParagraph();
+      flushList();
+      html.push("<hr>");
+    } else if (/^\s*>/.test(line)) {
+      flushParagraph();
+      flushList();
+      html.push(
+        "<blockquote>" +
+        inline(line.replace(/^\s*>\s?/, "")) +
+        "</blockquote>"
+      );
+    } else if (bullet || numbered) {
+      flushParagraph();
+
+      var type =
+        bullet ? "ul" : "ol";
+
+      if (!list || list.type !== type) {
+        flushList();
+        list = { type: type, items: [] };
+      }
+
+      list.items.push((bullet || numbered)[1]);
+    } else {
+      flushList();
+      paragraph.push(line.trim());
+    }
+  });
+
+  if (inCode) {
+    html.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>");
+  }
+
+  flushParagraph();
+  flushList();
+
+  return html.join("\n");
+}
+
+function loadTextIntoPopup(
+  scan,
+  element
+) {
+  element.textContent =
+    "Loading...";
+
+  fetch(
+    scan.url,
+    { cache: "no-store" }
+  )
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error(
+          "HTTP " + response.status
+        );
+      }
+
+      return response.text();
+    })
+    .then(function (text) {
+      if (isMarkdownScan(scan)) {
+        element.classList.add("text-popup-markdown");
+        element.innerHTML = renderMarkdown(text);
+      } else {
+        element.classList.add("text-popup-plain");
+        element.textContent = text;
+      }
+    })
+    .catch(function (error) {
+      element.textContent =
+        "The text could not be loaded (" + error.message + ").";
+    });
 }
 
 function normalizeScan(
@@ -1361,7 +1582,7 @@ function normalizeScan(
     !normalizedFormat
   ) {
     normalizedFormat =
-      /\.(jpg|jpeg|png|mp4|mov|mp3|wav)(\?.*)?$/i.test(
+      /\.(jpg|jpeg|png|mp4|mov|mp3|wav|txt|md)(\?.*)?$/i.test(
         path ||
         filename
       )
@@ -2518,8 +2739,27 @@ function openImagePopup(
     );
   }
 
+  var isText =
+    !isAudio &&
+    isTextScan(
+      scan
+    );
+
+  if (
+    isText
+  ) {
+    /* Text windows can be resized freely, not in a fixed ratio */
+    popup.classList.add(
+      "text-popup"
+    );
+
+    popup.dataset.freeResize =
+      "true";
+  }
+
   var isVideo =
     !isAudio &&
+    !isText &&
     /\.mp4(\?.*)?$/i.test(
       scan.url ||
       scan.path ||
@@ -2533,6 +2773,21 @@ function openImagePopup(
       "mp4";
 
   if (
+    isText
+  ) {
+    media =
+      document.createElement(
+        "div"
+      );
+
+    media.className =
+      "text-popup-body";
+
+    loadTextIntoPopup(
+      scan,
+      media
+    );
+  } else if (
     isAudio
   ) {
     media =
@@ -2585,8 +2840,12 @@ function openImagePopup(
       "Image";
   }
 
-  media.src =
-    scan.url;
+  if (
+    !isText
+  ) {
+    media.src =
+      scan.url;
+  }
 
   content.appendChild(
     media
@@ -2689,6 +2948,18 @@ function openImagePopup(
     popup,
     media
   );
+
+  if (
+    isText
+  ) {
+    setStatus(
+      scan.name +
+      " opened",
+      "idle"
+    );
+
+    return;
+  }
 
   if (
     isVideo
@@ -3051,10 +3322,16 @@ function bindImagePopupResizing(
             popup
           );
 
+          var freeResize =
+            popup.dataset.freeResize ===
+            "true";
+
           var aspectRatio =
-            Number(
-              popup.dataset.aspectRatio
-            );
+            freeResize
+              ? 1
+              : Number(
+                popup.dataset.aspectRatio
+              );
 
           if (
             !isFinite(
@@ -3063,13 +3340,13 @@ function bindImagePopupResizing(
             aspectRatio <= 0
           ) {
             var mediaWidth =
-  image.naturalWidth ||
-  image.videoWidth ||
+  media.naturalWidth ||
+  media.videoWidth ||
   0;
 
 var mediaHeight =
-  image.naturalHeight ||
-  image.videoHeight ||
+  media.naturalHeight ||
+  media.videoHeight ||
   0;
 
 if (
@@ -3149,26 +3426,45 @@ if (
               heightFromY *
               aspectRatio;
 
-            var width =
-              Math.abs(
-                dx
-              ) >=
-              Math.abs(
-                dy *
-                aspectRatio
-              )
-                ? widthFromX
-                : widthFromY;
+            var width;
+            var height;
 
-            width =
-              Math.max(
-                width,
-                minimumWidth
-              );
+            if (
+              freeResize
+            ) {
+              width =
+                Math.max(
+                  widthFromX,
+                  minimumWidth
+                );
 
-            var height =
-              width /
-              aspectRatio;
+              height =
+                Math.max(
+                  heightFromY,
+                  160
+                );
+            } else {
+              width =
+                Math.abs(
+                  dx
+                ) >=
+                Math.abs(
+                  dy *
+                  aspectRatio
+                )
+                  ? widthFromX
+                  : widthFromY;
+
+              width =
+                Math.max(
+                  width,
+                  minimumWidth
+                );
+
+              height =
+                width /
+                aspectRatio;
+            }
 
             var left =
               startLeft;

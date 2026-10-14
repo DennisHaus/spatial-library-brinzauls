@@ -44,7 +44,7 @@ window.LOCATION_CONFIG = {
   target: [5.885, -75.285, 1176.3]
 },
 
-  navigationMode: "orbit",
+  navigationMode: "fly",
 
   uploadUrl:
     "https://github.com/DennisHaus/spatial-library-brinzauls/upload/main/scans",
@@ -129,12 +129,18 @@ window.LOCATION_CONFIG = {
           <strong>Audio:</strong>
           .mp3 | .wav
         </li>
+
+        <li>
+          <strong>Text:</strong>
+          .txt | .md (Markdown: headings, bold, lists and links
+          are formatted)
+        </li>
       </ul>
 
       <p>
-        Images, videos and audio files open in a small window that can be
-        moved by dragging its title bar. Image and video windows can be
-        resized at their corners.
+        Images, videos, audio and text files open in a small window that
+        can be moved by dragging its title bar. Image, video and text
+        windows can be resized at their corners.
       </p>
     </section>
 
@@ -258,8 +264,8 @@ window.LOCATION_CONFIG = {
       <h3>Media locations</h3>
 
       <p>
-        Images, videos and audio files can be linked to a place in the
-        point cloud. They appear there as small icons. Click an icon to
+        Images, videos, audio and text files can be linked to a place in
+        the point cloud. They appear there as small icons. Click an icon to
         open the file.
       </p>
 

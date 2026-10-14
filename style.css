@@ -2389,3 +2389,124 @@ button:active {
 #toggleMediaIcons[aria-pressed="false"] {
   color: var(--muted);
 }
+
+
+/* -------------------------------------------------------------------------- */
+/* TEXT POPUP (.txt / .md)                                                    */
+/* -------------------------------------------------------------------------- */
+
+.image-popup.text-popup {
+  width: 460px;
+  height: 520px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+}
+
+.text-popup .image-popup-content {
+  overflow: auto;
+}
+
+.text-popup-body {
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 16px 18px 22px;
+
+  color: #e6e6e6;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: auto;
+}
+
+.text-popup-plain {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.text-popup-markdown > :first-child {
+  margin-top: 0;
+}
+
+.text-popup-markdown h1,
+.text-popup-markdown h2,
+.text-popup-markdown h3,
+.text-popup-markdown h4,
+.text-popup-markdown h5,
+.text-popup-markdown h6 {
+  margin: 1.3em 0 0.5em;
+
+  color: #ffffff;
+
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.text-popup-markdown h1 { font-size: 18px; }
+.text-popup-markdown h2 { font-size: 15px; }
+.text-popup-markdown h3 { font-size: 13px; }
+
+.text-popup-markdown h4,
+.text-popup-markdown h5,
+.text-popup-markdown h6 {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.text-popup-markdown p,
+.text-popup-markdown ul,
+.text-popup-markdown ol,
+.text-popup-markdown pre,
+.text-popup-markdown blockquote {
+  margin: 0 0 0.9em;
+}
+
+.text-popup-markdown ul,
+.text-popup-markdown ol {
+  padding-left: 1.3em;
+}
+
+.text-popup-markdown a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.text-popup-markdown code {
+  padding: 1px 4px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  font-size: 11px;
+}
+
+.text-popup-markdown pre {
+  padding: 10px 12px;
+
+  overflow-x: auto;
+
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.text-popup-markdown pre code {
+  padding: 0;
+  background: none;
+}
+
+.text-popup-markdown blockquote {
+  padding-left: 10px;
+
+  border-left: 2px solid rgba(255, 255, 255, 0.35);
+
+  color: #bdbdbd;
+}
+
+.text-popup-markdown hr {
+  margin: 1.2em 0;
+
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}

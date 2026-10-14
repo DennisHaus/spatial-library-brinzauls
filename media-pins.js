@@ -2,7 +2,7 @@
 
 /*
   MEDIA PINS
-  Images, videos and audio files can be linked to a location in the
+  Images, videos, audio and text files can be linked to a location in the
   point cloud. They then appear as small icons in the viewer; clicking
   an icon opens the file.
 
@@ -61,6 +61,12 @@
       '<svg viewBox="0 0 16 16" aria-hidden="true">' +
         '<path class="fill" d="M2.5 6h2.5L8.5 3v10L5 10H2.5z"/>' +
         '<path d="M10.5 5.8a3 3 0 0 1 0 4.4M12.3 4a5.5 5.5 0 0 1 0 8"/>' +
+      "</svg>",
+
+    text:
+      '<svg viewBox="0 0 16 16" aria-hidden="true">' +
+        '<path d="M4 2h5.5L12.5 5v9h-8.5z"/>' +
+        '<path d="M6.3 7.5h4M6.3 9.8h4M6.3 12h2.6"/>' +
       "</svg>"
   };
 
@@ -180,6 +186,13 @@
   }
 
   function mediaKind(scan) {
+    if (
+      typeof window.isTextScan === "function" &&
+      window.isTextScan(scan)
+    ) {
+      return "text";
+    }
+
     if (
       typeof window.isAudioScan === "function" &&
       window.isAudioScan(scan)

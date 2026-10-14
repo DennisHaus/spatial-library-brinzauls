@@ -24,6 +24,8 @@ SUPPORTED_SUFFIXES = (
     ".mov",
     ".mp3",
     ".wav",
+    ".txt",
+    ".md",
 )
 
 
@@ -60,6 +62,12 @@ def get_format(filename):
     if lower_name.endswith(".wav"):
         return "wav"
 
+    if lower_name.endswith(".txt"):
+        return "txt"
+
+    if lower_name.endswith(".md"):
+        return "md"
+
     if lower_name.endswith(".copc.laz"):
         return "copc"
 
@@ -86,6 +94,8 @@ def remove_known_suffix(filename):
         ".mov",
         ".mp3",
         ".wav",
+        ".txt",
+        ".md",
     ):
         if lower_name.endswith(suffix):
             return filename[
