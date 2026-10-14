@@ -10630,12 +10630,229 @@ function setNavigationMode(
   }
 }
 
+/* Column-major 4x4 matrix product a * b (three.js element order) */
+function multiplyMatrixElements(
+  a,
+  b
+) {
+  var out =
+    new Array(16);
+
+  for (var column = 0; column < 4; column++) {
+    for (var row = 0; row < 4; row++) {
+      out[column * 4 + row] =
+        a[row] * b[column * 4] +
+        a[4 + row] * b[column * 4 + 1] +
+        a[8 + row] * b[column * 4 + 2] +
+        a[12 + row] * b[column * 4 + 3];
+    }
+  }
+
+  return out;
+}
+
+/*
+  Picking while a section is active.
+  Potree's own picking can return points that the section hides, so
+  here the loaded points are checked directly: a point counts only if
+  it is inside the section box and lies under the mouse. Of those,
+  the one closest to the camera wins. Returns null if nothing fits.
+*/
+function pickPointInSection(
+  x,
+  y
+) {
+  var volume =
+    state.sectionVolume;
+
+  var camera =
+    viewer.scene.getActiveCamera();
+
+  var canvas =
+    viewer.renderer.domElement;
+
+  if (
+    !volume ||
+    !volume.matrixWorld ||
+    !camera ||
+    !canvas
+  ) {
+    return null;
+  }
+
+  if (typeof volume.updateMatrixWorld === "function") {
+    volume.updateMatrixWorld(true);
+  }
+
+  var inverse =
+    volume.matrixWorld.clone();
+
+  if (typeof inverse.invert === "function") {
+    inverse.invert();
+  } else {
+    inverse.getInverse(volume.matrixWorld);
+  }
+
+  var boxMatrix =
+    inverse.elements;
+
+  var viewProjection =
+    multiplyMatrixElements(
+      camera.projectionMatrix.elements,
+      camera.matrixWorldInverse.elements
+    );
+
+  var width =
+    canvas.clientWidth;
+
+  var height =
+    canvas.clientHeight;
+
+  var best = null;
+  var bestDepth = Infinity;
+  var radii = [5, 12];
+
+  var clouds =
+    (viewer.scene.pointclouds || []).filter(
+      function (cloud) {
+        return cloud.visible !== false;
+      }
+    );
+
+  for (var r = 0; r < radii.length && !best; r++) {
+    var radius2 =
+      radii[r] * radii[r];
+
+    clouds.forEach(function (cloud) {
+      (cloud.visibleNodes || []).forEach(function (node) {
+        var points =
+          node.sceneNode ||
+          node;
+
+        var geometry =
+          points && points.geometry;
+
+        var attribute =
+          geometry &&
+          geometry.attributes &&
+          geometry.attributes.position;
+
+        if (
+          !attribute ||
+          !attribute.array ||
+          !points.matrixWorld
+        ) {
+          return;
+        }
+
+        var world =
+          points.matrixWorld.elements;
+
+        var m =
+          multiplyMatrixElements(
+            viewProjection,
+            world
+          );
+
+        var array =
+          attribute.array;
+
+        var stride =
+          attribute.itemSize || 3;
+
+        var count =
+          attribute.count ||
+          Math.floor(array.length / stride);
+
+        for (var i = 0; i < count; i++) {
+          var index =
+            i * stride;
+
+          var px = array[index];
+          var py = array[index + 1];
+          var pz = array[index + 2];
+
+          var w =
+            m[3] * px + m[7] * py + m[11] * pz + m[15];
+
+          if (w <= 0) {
+            continue;
+          }
+
+          var sx =
+            ((m[0] * px + m[4] * py + m[8] * pz + m[12]) / w + 1) / 2 * width;
+
+          var sy =
+            (1 - (m[1] * px + m[5] * py + m[9] * pz + m[13]) / w) / 2 * height;
+
+          var dx = sx - x;
+          var dy = sy - y;
+
+          if (dx * dx + dy * dy > radius2) {
+            continue;
+          }
+
+          var depth =
+            (m[2] * px + m[6] * py + m[10] * pz + m[14]) / w;
+
+          if (depth >= bestDepth) {
+            continue;
+          }
+
+          /* world position */
+          var wx = world[0] * px + world[4] * py + world[8] * pz + world[12];
+          var wy = world[1] * px + world[5] * py + world[9] * pz + world[13];
+          var wz = world[2] * px + world[6] * py + world[10] * pz + world[14];
+
+          /* inside the section box? (box spans -0.5 ... 0.5) */
+          var bx = boxMatrix[0] * wx + boxMatrix[4] * wy + boxMatrix[8] * wz + boxMatrix[12];
+          var by = boxMatrix[1] * wx + boxMatrix[5] * wy + boxMatrix[9] * wz + boxMatrix[13];
+          var bz = boxMatrix[2] * wx + boxMatrix[6] * wy + boxMatrix[10] * wz + boxMatrix[14];
+
+          if (
+            bx < -0.5 || bx > 0.5 ||
+            by < -0.5 || by > 0.5 ||
+            bz < -0.5 || bz > 0.5
+          ) {
+            continue;
+          }
+
+          bestDepth = depth;
+          best = { x: wx, y: wy, z: wz };
+        }
+      });
+    });
+  }
+
+  if (!best) {
+    return null;
+  }
+
+  /* Return the same vector type Potree uses */
+  var result =
+    camera.position.clone();
+
+  result.set(best.x, best.y, best.z);
+
+  return result;
+}
+
 /* Point of the scan under a pixel of the canvas, or null */
 function pickPointAt(
   x,
   y
 ) {
   try {
+    /* With a section, only points inside the slice can be picked */
+    if (
+      state.sectionVolume
+    ) {
+      return pickPointInSection(
+        x,
+        y
+      );
+    }
+
     if (
       !window.Potree ||
       !Potree.Utils ||
