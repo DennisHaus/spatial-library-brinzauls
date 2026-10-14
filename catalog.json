@@ -83,7 +83,12 @@
       "sizeBytes": 3751656,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-14"
+      "uploadedAt": "2026-10-14",
+      "location": [
+        -102.4,
+        -6.67,
+        1144.73
+      ]
     },
     {
       "id": "scans-stallikon-test-stallikon-15mio",
@@ -169,5 +174,6 @@
       "crs": null,
       "uploadedAt": "2026-10-01"
     }
-  ]
+  ],
+  "locationsApplied": "2026-10-14-135504.json"
 }
