@@ -136,7 +136,12 @@
       "sizeBytes": 1577842,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-01"
+      "uploadedAt": "2026-10-01",
+      "location": [
+        -131.66,
+        103.92,
+        1175.64
+      ]
     },
     {
       "id": "scans-studentgroup1-skizzen",
@@ -175,5 +180,5 @@
       "uploadedAt": "2026-10-01"
     }
   ],
-  "locationsApplied": "2026-10-14-135504.json"
+  "locationsApplied": "2026-10-14-140240.json"
 }
