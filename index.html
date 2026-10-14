@@ -75,7 +75,8 @@
       </div>
 
       <div class="topbar-actions">
-        <div class="topbar-stack">
+        <!-- First line: Add Data, Export PNG, resolution, Read Me -->
+        <div class="topbar-row">
           <a
             id="addModel"
             class="button button-secondary"
@@ -87,6 +88,41 @@
             Add Data
           </a>
 
+          <div class="screenshot-export-controls">
+            <button
+              id="exportScreenshot"
+              class="toolbar-button"
+              type="button"
+              title="Export PNG Image to Desktop"
+            >
+              Export PNG
+            </button>
+
+            <select
+              id="screenshotScale"
+              class="toolbar-button screenshot-scale-select"
+              aria-label="Screenshot resolution"
+              title="1x-5x Viewer Resolution"
+            >
+              <option value="1">1x</option>
+              <option value="2">2x</option>
+              <option value="3" selected>3x</option>
+              <option value="4">4x</option>
+              <option value="5">5x</option>
+            </select>
+          </div>
+
+          <button
+            id="OpenDescription"
+            class="toolbar-button"
+            type="button"
+          >
+            Read Me
+          </button>
+        </div>
+
+        <!-- Second line: media icons -->
+        <div class="topbar-row">
           <button
             id="toggleMediaIcons"
             class="button button-secondary"
@@ -97,38 +133,6 @@
             Hide Icons
           </button>
         </div>
-
-        <div class="screenshot-export-controls">
-          <button
-            id="exportScreenshot"
-            class="toolbar-button"
-            type="button"
-            title="Export PNG Image to Desktop"
-          >
-            Export PNG
-          </button>
-
-          <select
-            id="screenshotScale"
-            class="toolbar-button screenshot-scale-select"
-            aria-label="Screenshot resolution"
-            title="1x-5x Viewer Resolution"
-          >
-            <option value="1">1x</option>
-            <option value="2">2x</option>
-            <option value="3" selected>3x</option>
-            <option value="4">4x</option>
-            <option value="5">5x</option>
-          </select>
-        </div>
-
-        <button
-          id="OpenDescription"
-          class="toolbar-button"
-          type="button"
-        >
-          Read Me
-        </button>
       </div>
     </header>
 

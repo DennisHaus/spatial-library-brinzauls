@@ -2355,18 +2355,35 @@ button:active {
 }
 
 
-/* Add Data + Hide Icons, stacked */
-.topbar-stack {
-  display: flex;
+/* Topbar: Add Data, Export PNG, 1x-5x, Read Me on one line;
+   Hide Icons on its own line below */
+.topbar-actions {
   flex-direction: column;
-  gap: 5px;
+  align-items: flex-start;
+  gap: 6px;
+}
 
+.topbar-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+
+  flex-wrap: nowrap;
+  max-width: 100%;
+}
+
+.topbar-row > * {
   flex: 0 0 auto;
 }
 
-.topbar-stack .button {
-  width: 100%;
+.topbar-row .button,
+.topbar-row .toolbar-button {
+  height: 31px;
+  min-height: 31px;
   box-sizing: border-box;
+
+  white-space: nowrap;
 }
 
 #toggleMediaIcons[aria-pressed="false"] {
