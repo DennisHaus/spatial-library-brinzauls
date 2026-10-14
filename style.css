@@ -1984,7 +1984,7 @@ button:active {
 
 .measure-overlay {
   position: absolute;
-  z-index: 5;
+  z-index: 12;
   inset: 0;
 
   width: 100%;
@@ -1998,13 +1998,50 @@ button:active {
 .measure-line {
   stroke: #ffffff;
   stroke-width: 1.5;
-  stroke-dasharray: 5 4;
+  stroke-dasharray: 6 4;
+
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
 }
 
-.measure-marker circle {
+.measure-ring {
+  fill: rgba(255, 255, 255, 0.12);
+  stroke: #ffffff;
+  stroke-width: 2;
+
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
+}
+
+.measure-dot {
   fill: #ffffff;
   stroke: #000000;
-  stroke-width: 1.5;
+  stroke-width: 1;
+}
+
+.measure-pulse {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+
+  opacity: 0;
+
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.measure-marker.is-new .measure-pulse {
+  animation: measure-pulse 0.9s ease-out 2;
+}
+
+@keyframes measure-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
 }
 
 .measure-marker text,

@@ -136,6 +136,7 @@
 
     renderPanel();
     startOverlay();
+    pulseMarker(points.length - 1);
 
     var deltas =
       getDeltas();
@@ -393,11 +394,19 @@
         svgElement("g", { class: "measure-marker", "data-name": name });
 
       group.appendChild(
-        svgElement("circle", { r: "5" })
+        svgElement("circle", { class: "measure-pulse", r: "10" })
+      );
+
+      group.appendChild(
+        svgElement("circle", { class: "measure-ring", r: "9" })
+      );
+
+      group.appendChild(
+        svgElement("circle", { class: "measure-dot", r: "3" })
       );
 
       var label =
-        svgElement("text", { x: "9", y: "-8" });
+        svgElement("text", { x: "13", y: "-11" });
 
       label.textContent = name;
 
@@ -415,13 +424,16 @@
     return overlay;
   }
 
+  /*
+    Screen position of a 3D point. Done with the camera matrices
+    directly, because this Potree build does not expose THREE globally.
+  */
   function project(point) {
     var canvas =
       getCanvas();
 
     if (
       !canvas ||
-      !window.THREE ||
       !viewer.scene ||
       typeof viewer.scene.getActiveCamera !== "function"
     ) {
@@ -431,19 +443,49 @@
     var camera =
       viewer.scene.getActiveCamera();
 
-    var vector =
-      new THREE.Vector3(point.x, point.y, point.z).project(camera);
+    if (
+      !camera ||
+      !camera.matrixWorldInverse ||
+      !camera.projectionMatrix
+    ) {
+      return null;
+    }
+
+    var v =
+      camera.matrixWorldInverse.elements;
+
+    var p =
+      camera.projectionMatrix.elements;
+
+    /* world -> camera space */
+    var cx = v[0] * point.x + v[4] * point.y + v[8] * point.z + v[12];
+    var cy = v[1] * point.x + v[5] * point.y + v[9] * point.z + v[13];
+    var cz = v[2] * point.x + v[6] * point.y + v[10] * point.z + v[14];
+
+    /* camera space -> clip space */
+    var clipX = p[0] * cx + p[4] * cy + p[8] * cz + p[12];
+    var clipY = p[1] * cx + p[5] * cy + p[9] * cz + p[13];
+    var clipZ = p[2] * cx + p[6] * cy + p[10] * cz + p[14];
+    var clipW = p[3] * cx + p[7] * cy + p[11] * cz + p[15];
+
+    /* behind the camera */
+    if (clipW <= 0) {
+      return null;
+    }
+
+    var ndcZ =
+      clipZ / clipW;
 
     if (
-      vector.z < -1 ||
-      vector.z > 1
+      ndcZ < -1 ||
+      ndcZ > 1
     ) {
       return null;
     }
 
     return {
-      x: (vector.x + 1) / 2 * canvas.clientWidth,
-      y: (1 - vector.y) / 2 * canvas.clientHeight
+      x: (clipX / clipW + 1) / 2 * canvas.clientWidth,
+      y: (1 - clipY / clipW) / 2 * canvas.clientHeight
     };
   }
 
@@ -495,6 +537,38 @@
       line.style.display = "none";
       label.style.display = "none";
     }
+  }
+
+  function pulseMarker(index) {
+    if (!overlay) {
+      return;
+    }
+
+    var marker =
+      overlay.querySelector(
+        '[data-name="' + (index === 0 ? "A" : "B") + '"]'
+      );
+
+    if (!marker) {
+      return;
+    }
+
+    /* A new measurement hides the old point B */
+    if (index === 0) {
+      var other =
+        overlay.querySelector('[data-name="B"]');
+
+      if (other) {
+        other.classList.remove("is-new");
+      }
+    }
+
+    marker.classList.remove("is-new");
+
+    /* force a reflow so the animation starts again */
+    void marker.getBoundingClientRect();
+
+    marker.classList.add("is-new");
   }
 
   function loop() {
