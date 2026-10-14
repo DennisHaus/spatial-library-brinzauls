@@ -2402,8 +2402,19 @@ button:active {
   max-height: calc(100vh - 20px);
 }
 
+/*
+  The media area centers images and videos vertically. For text that
+  would push the beginning above the visible area when the text is
+  longer than the window, so text starts at the top and scrolls.
+*/
 .text-popup .image-popup-content {
-  overflow: auto;
+  display: block;
+
+  padding: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .text-popup-body {
