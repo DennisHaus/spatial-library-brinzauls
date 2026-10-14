@@ -1161,12 +1161,42 @@ function isImageScan(scan) {
     format === "image" ||
     format === "mp4" ||
     format === "mov" ||
-    format === "video"
+    format === "video" ||
+    format === "mp3" ||
+    format === "wav" ||
+    format === "audio"
   ) {
     return true;
   }
 
-  return /\.(jpg|jpeg|png|mp4|mov)(\?.*)?$/i.test(
+  return /\.(jpg|jpeg|png|mp4|mov|mp3|wav)(\?.*)?$/i.test(
+    scan.url ||
+    scan.path ||
+    scan.filename ||
+    ""
+  );
+}
+
+function isAudioScan(scan) {
+  if (!scan) {
+    return false;
+  }
+
+  var format =
+    String(
+      scan.format ||
+      ""
+    ).toLowerCase();
+
+  if (
+    format === "mp3" ||
+    format === "wav" ||
+    format === "audio"
+  ) {
+    return true;
+  }
+
+  return /\.(mp3|wav)(\?.*)?$/i.test(
     scan.url ||
     scan.path ||
     scan.filename ||
@@ -1331,7 +1361,7 @@ function normalizeScan(
     !normalizedFormat
   ) {
     normalizedFormat =
-      /\.(jpg|jpeg|png|mp4|mov)(\?.*)?$/i.test(
+      /\.(jpg|jpeg|png|mp4|mov|mp3|wav)(\?.*)?$/i.test(
         path ||
         filename
       )
@@ -2439,7 +2469,22 @@ function openImagePopup(
     "image-popup-content";
 
   var media;
+
+  var isAudio =
+    isAudioScan(
+      scan
+    );
+
+  if (
+    isAudio
+  ) {
+    popup.classList.add(
+      "audio-popup"
+    );
+  }
+
   var isVideo =
+    !isAudio &&
     /\.mp4(\?.*)?$/i.test(
       scan.url ||
       scan.path ||
@@ -2453,6 +2498,25 @@ function openImagePopup(
       "mp4";
 
   if (
+    isAudio
+  ) {
+    media =
+      document.createElement(
+        "audio"
+      );
+
+    media.controls =
+      true;
+
+    media.preload =
+      "metadata";
+
+    media.setAttribute(
+      "aria-label",
+      scan.name ||
+      "Audio"
+    );
+  } else if (
     isVideo
   ) {
     media =
@@ -2501,12 +2565,19 @@ function openImagePopup(
     content
   );
 
-  [
-    "ne",
-    "se",
-    "sw",
-    "nw"
-  ].forEach(
+  /*
+    Audio players have a fixed size, so they get no resize handles.
+  */
+  (
+    isAudio
+      ? []
+      : [
+        "ne",
+        "se",
+        "sw",
+        "nw"
+      ]
+  ).forEach(
     function (
       direction
     ) {
@@ -2566,6 +2637,18 @@ function openImagePopup(
     titlebar,
     closeButton
   );
+
+  if (
+    isAudio
+  ) {
+    setStatus(
+      scan.name +
+      " opened",
+      "idle"
+    );
+
+    return;
+  }
 
   bindImagePopupResizing(
     popup,
