@@ -74,6 +74,18 @@
       "uploadedAt": "2026-09-30"
     },
     {
+      "id": "scans-moosjungfer",
+      "name": "Moosjungfer",
+      "filename": "Moosjungfer.wav",
+      "path": "./scans/Moosjungfer.wav",
+      "url": "./scans/Moosjungfer.wav",
+      "format": "wav",
+      "sizeBytes": 3751656,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-14"
+    },
+    {
       "id": "scans-stallikon-test-stallikon-15mio",
       "name": "Stallikon 15mio",
       "filename": "stallikon_15mio.copc.laz",
