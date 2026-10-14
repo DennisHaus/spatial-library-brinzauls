@@ -183,6 +183,18 @@
       "pointCount": null,
       "crs": null,
       "uploadedAt": "2026-10-01"
+    },
+    {
+      "id": "scans-haus-zur-laterne",
+      "name": "Haus Zur Laterne",
+      "filename": "haus-zur-laterne.md",
+      "path": "./scans/haus-zur-laterne.md",
+      "url": "./scans/haus-zur-laterne.md",
+      "format": "md",
+      "sizeBytes": 1183,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-14"
     }
   ],
   "locationsApplied": "2026-10-14-144146.json"
