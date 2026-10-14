@@ -333,11 +333,30 @@ function bindDropdown(
     return;
   }
 
+  /*
+    Open or closed on start: set per location in location-config.js
+    (panelsOpenOnStart). Without that setting, index.html decides.
+  */
+  var panelName =
+    {
+      toggleLibrary: "library",
+      toggleInspector: "inspector"
+    }[buttonId];
+
+  var startSettings =
+    (
+      window.LOCATION_CONFIG &&
+      window.LOCATION_CONFIG.panelsOpenOnStart
+    ) ||
+    {};
+
   var expanded =
-    button.getAttribute(
-      "aria-expanded"
-    ) ===
-    "true";
+    typeof startSettings[panelName] === "boolean"
+      ? startSettings[panelName]
+      : button.getAttribute(
+        "aria-expanded"
+      ) ===
+        "true";
 
   setDropdownState(
     button,
@@ -1287,6 +1306,7 @@ function renderMarkdown(source) {
 
   var html = [];
   var paragraph = [];
+  var quote = [];
   var list = null;
   var inCode = false;
   var code = [];
@@ -1295,6 +1315,18 @@ function renderMarkdown(source) {
     if (paragraph.length) {
       html.push("<p>" + inline(paragraph.join(" ")) + "</p>");
       paragraph = [];
+    }
+  }
+
+  /* Consecutive "> " lines form one quote, each on its own line */
+  function flushQuote() {
+    if (quote.length) {
+      html.push(
+        "<blockquote>" +
+        quote.map(inline).join("<br>") +
+        "</blockquote>"
+      );
+      quote = [];
     }
   }
 
@@ -1312,6 +1344,10 @@ function renderMarkdown(source) {
   }
 
   lines.forEach(function (line) {
+    if (!/^\s*>/.test(line)) {
+      flushQuote();
+    }
+
     if (/^\s*```/.test(line)) {
       if (inCode) {
         html.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>");
@@ -1357,10 +1393,8 @@ function renderMarkdown(source) {
     } else if (/^\s*>/.test(line)) {
       flushParagraph();
       flushList();
-      html.push(
-        "<blockquote>" +
-        inline(line.replace(/^\s*>\s?/, "")) +
-        "</blockquote>"
+      quote.push(
+        line.replace(/^\s*>\s?/, "")
       );
     } else if (bullet || numbered) {
       flushParagraph();
@@ -1384,6 +1418,7 @@ function renderMarkdown(source) {
     html.push("<pre><code>" + escapeHtml(code.join("\n")) + "</code></pre>");
   }
 
+  flushQuote();
   flushParagraph();
   flushList();
 

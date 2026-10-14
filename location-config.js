@@ -46,6 +46,14 @@ window.LOCATION_CONFIG = {
 
   navigationMode: "fly",
 
+  /*
+    Which side panels are open when the page opens.
+  */
+  panelsOpenOnStart: {
+    library: true,
+    inspector: false
+  },
+
   uploadUrl:
     "https://github.com/DennisHaus/spatial-library-brinzauls/upload/main/scans",
 
