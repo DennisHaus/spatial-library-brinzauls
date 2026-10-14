@@ -66,6 +66,17 @@ window.LOCATION_CONFIG = {
 
   downloadPassword: "Voser",
 
+  /*
+    Usage counters in the Read Me (downloads, renders, documents, visits).
+    The counts are stored on a free counter service so that every visitor
+    sees the same totals. Use a unique namespace per location.
+  */
+  usageStats: {
+    enabled: true,
+    apiBase: "https://abacus.jasoncameron.dev",
+    namespace: "spatial-library-brinzauls"
+  },
+
   readmeHtml: `
     <section>
       <h3>Overview</h3>

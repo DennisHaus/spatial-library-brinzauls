@@ -1584,6 +1584,9 @@ function updateScanCount() {
         : "scans"
     )
   );
+  if (window.UsageStats) {
+    window.UsageStats.setDocuments(count);
+  }
 }
 
 function buildLibraryTree(
@@ -7821,6 +7824,10 @@ function downloadActiveScan() {
   link.click();
 
   link.remove();
+
+  if (window.UsageStats) {
+    window.UsageStats.track("downloads");
+  }
 }
 
 
@@ -8844,6 +8851,9 @@ function exportScreenshot() {
       filename,
       "idle"
     );
+    if (window.UsageStats) {
+      window.UsageStats.track("renders");
+    }
   }
 
   function renderScreenshotFrame() {

@@ -1863,3 +1863,84 @@ button:active {
   left: -6px;
   cursor: nwse-resize;
 }
+
+
+/* -------------------------------------------------------------------------- */
+/* USAGE STATS (READ ME)                                                      */
+/* -------------------------------------------------------------------------- */
+
+.usage-stats {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+
+  border-bottom: 1px solid rgba(29, 29, 27, 0.25);
+}
+
+.usage-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  margin: 0;
+
+  border-top: 1px solid rgba(29, 29, 27, 0.25);
+}
+
+.usage-stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.35rem;
+
+  min-width: 0;
+  padding: 0.75rem 0.75rem 0 0;
+}
+
+.usage-stat + .usage-stat {
+  padding-left: 0.75rem;
+
+  border-left: 1px solid rgba(29, 29, 27, 0.25);
+}
+
+.usage-stat-value {
+  margin: 0;
+
+  color: #1d1d1b;
+
+  font-size: 2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.usage-stat-label {
+  color: rgba(29, 29, 27, 0.65);
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .usage-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .usage-stat:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .usage-stat:nth-child(n + 3) {
+    margin-top: 0.75rem;
+    border-top: 1px solid rgba(29, 29, 27, 0.25);
+  }
+
+  .usage-stat-value {
+    font-size: 1.6rem;
+  }
+}
