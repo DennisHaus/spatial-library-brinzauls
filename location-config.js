@@ -44,7 +44,7 @@ window.LOCATION_CONFIG = {
   target: [5.885, -75.285, 1176.3]
 },
 
-  navigationMode: "fly",
+  navigationMode: "Orbit",
 
   /*
     Which side panels are open when the page opens.
