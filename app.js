@@ -10380,6 +10380,14 @@ function bindNavigationMouse(
   surface.addEventListener(
     "pointerdown",
     function (event) {
+      /* Cmd/Ctrl-click: measure points instead of moving the camera */
+      if (
+        window.MeasureTool &&
+        window.MeasureTool.handlePointerDown(event)
+      ) {
+        return;
+      }
+
       var pan =
         event.button === 2 ||
         event.button === 1 ||
@@ -10561,6 +10569,14 @@ function bindNavigationMouse(
   surface.addEventListener(
     "dblclick",
     function (event) {
+      /* Two quick Cmd/Ctrl-clicks are measurements, not a double-click */
+      if (
+        event.metaKey ||
+        event.ctrlKey
+      ) {
+        return;
+      }
+
       var rect =
         canvas.getBoundingClientRect();
 

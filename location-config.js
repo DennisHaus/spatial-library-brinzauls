@@ -209,6 +209,41 @@ window.LOCATION_CONFIG = {
     </section>
 
     <section>
+      <h3>Measuring</h3>
+
+      <ul>
+        <li>
+          <strong>⌘-click (Mac) or Ctrl-click (Windows):</strong>
+          Click on a point of a scan to see its X, Y and Z coordinates.
+        </li>
+
+        <li>
+          <strong>Second ⌘/Ctrl-click:</strong>
+          Shows the second point and the difference between both points:
+          ΔX, ΔY, ΔZ, the horizontal distance, the 3D distance and the
+          slope in degrees and percent.
+        </li>
+
+        <li>
+          <strong>Third ⌘/Ctrl-click:</strong>
+          Starts a new measurement.
+        </li>
+
+        <li>
+          <strong>Copy / × / Esc:</strong>
+          Copy puts all values on the clipboard, for example to paste
+          into a spreadsheet. × or the Esc key removes the measurement.
+        </li>
+      </ul>
+
+      <p>
+        Values are shown in the units of the scan, usually meters.
+        Only visible points can be measured. When a section is active,
+        only points inside the slice can be picked.
+      </p>
+    </section>
+
+    <section>
       <h3>Model library</h3>
 
       <ul>
