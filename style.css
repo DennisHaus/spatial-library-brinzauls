@@ -2206,10 +2206,19 @@ button:active {
   top: 0;
   left: 0;
 
+  box-sizing: border-box;
+
   width: 28px;
   height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  max-width: 28px;
+  max-height: 28px;
+  aspect-ratio: 1 / 1;
   margin: -14px 0 0 -14px;
   padding: 0;
+
+  line-height: 0;
 
   display: flex;
   align-items: center;
@@ -2249,9 +2258,14 @@ button:active {
 .media-pin:hover,
 .media-pin:focus-visible,
 .media-pin.is-current {
+  border-color: #ffffff;
   color: #000000;
   background: #ffffff;
   outline: none;
+}
+
+.media-pin svg {
+  flex: 0 0 auto;
 }
 
 .media-pin-label {
@@ -2338,4 +2352,23 @@ button:active {
 
 .media-pin-bar.hidden {
   display: none;
+}
+
+
+/* Add Data + Hide Icons, stacked */
+.topbar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  flex: 0 0 auto;
+}
+
+.topbar-stack .button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#toggleMediaIcons[aria-pressed="false"] {
+  color: var(--muted);
 }

@@ -67,6 +67,17 @@ window.LOCATION_CONFIG = {
   downloadPassword: "Voser",
 
   /*
+    Shift added to the coordinates shown when measuring.
+    Use it when a scan was moved during export, so X, Y and Z show the
+    real values again. Distances and differences are not affected.
+
+    Only a vertical shift (meters):   coordinateShift: 205,
+    All three axes:                   coordinateShift: [2600000, 1200000, 205],
+    No shift:                         coordinateShift: 0,
+  */
+  coordinateShift: 0,
+
+  /*
     Usage counters in the Read Me (downloads, renders, documents, visits).
     The counts are stored on a free counter service so that every visitor
     sees the same totals. Use a unique namespace per location.
@@ -258,7 +269,8 @@ window.LOCATION_CONFIG = {
           Open a media file from the library, then Shift + ⌘-click
           (Mac) or Shift + Ctrl-click (Windows) on a point of a scan.
           The location applies to the media window in front.
-          Doing it again moves the icon.
+          Doing it again moves the icon to the new place, also for
+          locations that were already saved.
         </li>
 
         <li>
@@ -267,17 +279,18 @@ window.LOCATION_CONFIG = {
         </li>
 
         <li>
-          <strong>P key:</strong>
-          Shows or hides all media icons.
+          <strong>Hide Icons / Show Icons (or the P key):</strong>
+          Hides or shows all media icons. The choice is remembered.
         </li>
 
         <li>
           <strong>Saving:</strong>
-          New locations are saved in your browser and are still there
-          on your next visit, but only on this computer. To make them
-          visible to everyone, use "Download catalog.json" at the
-          bottom right of the viewer and upload the file to the
-          repository, replacing the existing catalog.json.
+          New and changed locations are first kept in your browser only.
+          A bar at the bottom right of the viewer shows how many changes
+          there are. "Save for everyone" opens GitHub with the locations
+          already filled in; click "Commit changes" there. After a short
+          moment, the catalog is updated and every visitor sees the
+          icons. "Discard" undoes your changes.
         </li>
       </ul>
     </section>

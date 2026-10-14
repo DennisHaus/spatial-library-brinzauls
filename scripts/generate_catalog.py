@@ -9,6 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SCANS_DIR = ROOT / "scans"
 CATALOG_FILE = ROOT / "catalog.json"
 
+# Media locations saved from the viewer ("Save for everyone")
+LOCATIONS_DIR = ROOT / "locations"
+
 
 SUPPORTED_SUFFIXES = (
     ".copc.laz",
@@ -19,6 +22,8 @@ SUPPORTED_SUFFIXES = (
     ".jpeg",
     ".mp4",
     ".mov",
+    ".mp3",
+    ".wav",
 )
 
 
@@ -47,7 +52,13 @@ def get_format(filename):
         return "mp4"
 
     if lower_name.endswith(".mov"):
-                return "mov"
+        return "mov"
+
+    if lower_name.endswith(".mp3"):
+        return "mp3"
+
+    if lower_name.endswith(".wav"):
+        return "wav"
 
     if lower_name.endswith(".copc.laz"):
         return "copc"
@@ -73,6 +84,8 @@ def remove_known_suffix(filename):
         ".las",
         ".mp4",
         ".mov",
+        ".mp3",
+        ".wav",
     ):
         if lower_name.endswith(suffix):
             return filename[
@@ -145,8 +158,11 @@ def get_git_date(relative_path):
 
 
 def load_existing_catalog():
+    """
+    Returns (entries by path, the whole previous catalog).
+    """
     if not CATALOG_FILE.exists():
-        return {}
+        return {}, {}
 
     try:
         with CATALOG_FILE.open(
@@ -166,7 +182,7 @@ def load_existing_catalog():
             ): scan
             for scan in scans
             if scan.get("path")
-        }
+        }, data
 
     except Exception as error:
         print(
@@ -174,7 +190,72 @@ def load_existing_catalog():
             error
         )
 
-        return {}
+        return {}, {}
+
+
+def parse_location(value):
+    """
+    [x, y, z] as three numbers, or None.
+    """
+    if not isinstance(value, (list, tuple)) or len(value) < 3:
+        return None
+
+    try:
+        return [
+            round(float(number), 3)
+            for number in value[:3]
+        ]
+    except (TypeError, ValueError):
+        return None
+
+
+def load_location_files(last_applied):
+    """
+    Reads locations/*.json written by the viewer's "Save for everyone".
+    File names start with date and time, so sorting them gives the
+    order in which they were saved; later files win.
+
+    Only files newer than last_applied are used. This way a location
+    that is later edited by hand in catalog.json is not overwritten
+    again by an old file. Old files can be deleted at any time.
+
+    Returns (locations by path, name of the newest applied file).
+    """
+    locations = {}
+    newest = last_applied or ""
+
+    if not LOCATIONS_DIR.exists():
+        return locations, newest
+
+    for file in sorted(LOCATIONS_DIR.glob("*.json")):
+        if last_applied and file.name <= last_applied:
+            continue
+
+        try:
+            with file.open("r", encoding="utf-8") as handle:
+                data = json.load(handle)
+        except Exception as error:
+            print("Skipped", file.name + ":", error)
+            continue
+
+        entries = (
+            data.get("locations", {})
+            if isinstance(data, dict)
+            else {}
+        )
+
+        for path, value in entries.items():
+            # null means: remove the location
+            locations[normalize_path(path)] = (
+                None if value is None
+                else parse_location(value)
+            )
+
+        newest = max(newest, file.name)
+
+        print("Applied locations from", file.name)
+
+    return locations, newest
 
 
 def is_supported_file(file):
@@ -189,7 +270,11 @@ def is_supported_file(file):
 
 
 def create_catalog():
-    existing = load_existing_catalog()
+    existing, previous_catalog = load_existing_catalog()
+
+    new_locations, locations_applied = load_location_files(
+        previous_catalog.get("locationsApplied")
+    )
 
     scans = []
 
@@ -232,7 +317,11 @@ def create_catalog():
             file.name
         )
 
-        scan = {
+        # Start from the previous entry so extra fields such as
+        # "location" or "folderPath" are kept.
+        scan = dict(previous)
+
+        scan.update({
             "id": previous.get(
                 "id",
                 slugify(
@@ -273,7 +362,15 @@ def create_catalog():
                     relative_path
                 )
             )
-        }
+        })
+
+        location_key = normalize_path(catalog_path)
+
+        if location_key in new_locations:
+            if new_locations[location_key] is None:
+                scan.pop("location", None)
+            else:
+                scan["location"] = new_locations[location_key]
 
         scans.append(scan)
 
@@ -287,6 +384,9 @@ def create_catalog():
         "version": 1,
         "scans": scans
     }
+
+    if locations_applied:
+        catalog["locationsApplied"] = locations_applied
 
     with CATALOG_FILE.open(
         "w",

@@ -6,21 +6,22 @@
   point cloud. They then appear as small icons in the viewer; clicking
   an icon opens the file.
 
-  Setting a location:
+  Setting or changing a location:
     1. Open a media file from the library (its window must be the
        frontmost media window).
     2. Shift + Cmd-click (Mac) or Shift + Ctrl-click (Windows) on a
-       point of a scan.
-  Shift + Cmd/Ctrl-click on an icon removes the location set in
-  this browser. The P key shows or hides all icons.
+       point of a scan. Doing it again moves the icon.
+  Shift + Cmd/Ctrl-click on an icon removes the location.
+  The "Hide Icons" button or the P key shows or hides all icons.
 
   Where locations are stored:
-    - In this browser (localStorage). They are still there on the next
-      visit, but only on this computer and browser.
-    - In catalog.json, as "location": [x, y, z] on a media entry.
-      These are visible to every visitor. "Download catalog.json" in
-      the pins bar creates the file with all locations set in this
-      browser, ready to upload to the repository.
+    - First in this browser (localStorage), so they survive a reload.
+    - "Save for everyone" in the bar at the bottom right opens GitHub
+      with a small file locations/<date-time>.json already filled in.
+      After "Commit changes", generate_catalog.py writes the locations
+      into catalog.json as "location": [x, y, z], and every visitor
+      sees them. Once catalog.json contains them, the browser copies
+      are cleared automatically.
 
   Needs from app.js: viewer, state, CONFIG, pickPointAt, setStatus,
   openImagePopup, isImageScan, isAudioScan.
@@ -34,11 +35,13 @@
   var localPins =
     readLocalPins();
 
+  var VISIBILITY_KEY =
+    "mediaPinsVisible:" + window.location.pathname;
+
   var layer = null;
   var bar = null;
   var frame = null;
-  var visible = true;
-  var rawCatalog = null;
+  var visible = readVisibility();
   var pinElements = new Map();
 
   var ICONS = {
@@ -90,6 +93,45 @@
     } catch (error) {
       status("Location could not be saved in this browser.", "error");
     }
+  }
+
+  function readVisibility() {
+    try {
+      return window.localStorage.getItem(VISIBILITY_KEY) !== "false";
+    } catch (error) {
+      return true;
+    }
+  }
+
+  function writeVisibility() {
+    try {
+      window.localStorage.setItem(VISIBILITY_KEY, String(visible));
+    } catch (error) {
+      /* ignore */
+    }
+  }
+
+  function hasLocal(id) {
+    return Object.prototype.hasOwnProperty.call(localPins, id);
+  }
+
+  function sameLocation(a, b) {
+    if (!a || !b) {
+      return !a && !b;
+    }
+
+    return (
+      Math.abs(a.x - b.x) < 0.0015 &&
+      Math.abs(a.y - b.y) < 0.0015 &&
+      Math.abs(a.z - b.z) < 0.0015
+    );
+  }
+
+  /* Repository path of a catalog entry, e.g. scans/photo.jpg */
+  function repoPath(scan) {
+    return String(scan.path || scan.filename || "")
+      .replace(/\\/g, "/")
+      .replace(/^\.\//, "");
   }
 
   function parseLocation(value) {
@@ -160,12 +202,47 @@
     return "image";
   }
 
+  /*
+    A location set in this browser wins over catalog.json.
+    null in this browser means "removed".
+  */
   function getLocation(scan) {
-    if (localPins[scan.id]) {
+    if (hasLocal(scan.id)) {
       return parseLocation(localPins[scan.id]);
     }
 
     return scan.location || null;
+  }
+
+  /*
+    Forget browser changes that catalog.json already contains,
+    for example after "Save for everyone" went through.
+  */
+  function clearSavedChanges() {
+    var changed = false;
+
+    getCatalog().forEach(function (scan) {
+      if (
+        hasLocal(scan.id) &&
+        sameLocation(
+          parseLocation(localPins[scan.id]),
+          scan.location || null
+        )
+      ) {
+        delete localPins[scan.id];
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      writeLocalPins();
+    }
+  }
+
+  function getChangedScans() {
+    return getCatalog().filter(function (scan) {
+      return hasLocal(scan.id);
+    });
   }
 
   function getViewerPanel() {
@@ -276,7 +353,7 @@
           event.shiftKey &&
           (event.metaKey || event.ctrlKey)
         ) {
-          removeLocalPin(scan);
+          removePin(scan);
           return;
         }
 
@@ -293,6 +370,8 @@
     if (!layer && !createLayer()) {
       return;
     }
+
+    clearSavedChanges();
 
     var wanted =
       new Map();
@@ -333,6 +412,7 @@
     });
 
     updateBar();
+    updateToggleButton();
 
     if (pinElements.size > 0) {
       startLoop();
@@ -431,27 +511,18 @@
     status("Location set for " + scan.name);
   }
 
-  function removeLocalPin(scan) {
-    if (!localPins[scan.id]) {
-      status(
-        scan.location
-          ? scan.name + ": this location comes from catalog.json"
-          : "No location to remove"
-      );
-
-      return;
+  function removePin(scan) {
+    if (scan.location) {
+      /* Hide the catalog location until it is saved for everyone */
+      localPins[scan.id] = null;
+    } else {
+      delete localPins[scan.id];
     }
-
-    delete localPins[scan.id];
 
     writeLocalPins();
     rebuild();
 
-    status(
-      scan.location
-        ? "Local location removed, catalog location shown again"
-        : "Location removed from " + scan.name
-    );
+    status("Location removed from " + scan.name);
   }
 
   /*
@@ -512,79 +583,73 @@
 
 
   /* ------------------------------------------------------------------------ */
-  /* PINS BAR: SAVE FOR ALL VISITORS                                          */
+  /* PINS BAR: SAVE FOR EVERYONE                                              */
   /* ------------------------------------------------------------------------ */
 
-  function getCatalogUrl() {
+  function pad(number) {
+    return String(number).padStart(2, "0");
+  }
+
+  function timestamp() {
+    var now =
+      new Date();
+
     return (
-      (window.CONFIG && CONFIG.catalogUrl) ||
-      (window.LOCATION_CONFIG && LOCATION_CONFIG.catalogUrl) ||
-      "./catalog.json"
+      now.getFullYear() + "-" +
+      pad(now.getMonth() + 1) + "-" +
+      pad(now.getDate()) + "-" +
+      pad(now.getHours()) +
+      pad(now.getMinutes()) +
+      pad(now.getSeconds())
     );
   }
 
-  function loadRawCatalog() {
-    return fetch(
-      getCatalogUrl(),
-      { cache: "no-store" }
-    )
-      .then(function (response) {
-        return response.ok ? response.json() : null;
-      })
-      .then(function (data) {
-        rawCatalog = data;
-        return data;
-      })
-      .catch(function () {
-        return null;
-      });
-  }
+  function buildLocationsFile() {
+    var locations = {};
 
-  /* Same id rule as normalizeScan() in app.js */
-  function rawId(entry, index) {
-    return String(
-      entry.id ||
-      entry.filename ||
-      "scan-" + (index + 1)
-    );
-  }
+    getChangedScans().forEach(function (scan) {
+      var location =
+        parseLocation(localPins[scan.id]);
 
-  function downloadCatalog() {
-    if (!rawCatalog) {
-      status("catalog.json could not be loaded.", "error");
-      return;
-    }
-
-    var copy =
-      JSON.parse(JSON.stringify(rawCatalog));
-
-    var entries =
-      Array.isArray(copy)
-        ? copy
-        : copy.scans;
-
-    if (!Array.isArray(entries)) {
-      status("Unknown catalog.json structure.", "error");
-      return;
-    }
-
-    var written = 0;
-
-    entries.forEach(function (entry, index) {
-      var pin =
-        localPins[rawId(entry, index)];
-
-      if (pin) {
-        entry.location = pin;
-        written++;
-      }
+      locations[repoPath(scan)] =
+        location
+          ? [round(location.x), round(location.y), round(location.z)]
+          : null;
     });
 
-    var blob =
-      new Blob(
-        [JSON.stringify(copy, null, 2) + "\n"],
-        { type: "application/json" }
+    return {
+      savedAt: new Date().toISOString(),
+      locations: locations
+    };
+  }
+
+  /*
+    GitHub "create new file" page in the locations folder.
+    Taken from locationsSaveUrl in location-config.js, or derived from
+    uploadUrl (https://github.com/OWNER/REPO/upload/BRANCH/...).
+  */
+  function getGitHubNewFileUrl() {
+    var config =
+      window.LOCATION_CONFIG || {};
+
+    if (config.locationsSaveUrl) {
+      return String(config.locationsSaveUrl);
+    }
+
+    var match =
+      String(config.uploadUrl || "").match(
+        /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/upload\/([^/]+)/
       );
+
+    return match
+      ? "https://github.com/" + match[1] + "/" + match[2] +
+        "/new/" + match[3] + "/locations"
+      : null;
+  }
+
+  function downloadFile(name, content) {
+    var blob =
+      new Blob([content], { type: "application/json" });
 
     var link =
       document.createElement("a");
@@ -593,7 +658,7 @@
       URL.createObjectURL(blob);
 
     link.download =
-      "catalog.json";
+      name;
 
     document.body.appendChild(link);
     link.click();
@@ -602,11 +667,60 @@
     window.setTimeout(function () {
       URL.revokeObjectURL(link.href);
     }, 2000);
+  }
+
+  function saveForEveryone() {
+    var changes =
+      getChangedScans().length;
+
+    if (changes === 0) {
+      return;
+    }
+
+    var name =
+      timestamp() + ".json";
+
+    var content =
+      JSON.stringify(buildLocationsFile(), null, 2) + "\n";
+
+    var base =
+      getGitHubNewFileUrl();
+
+    var url =
+      base
+        ? base +
+          "?filename=" + encodeURIComponent(name) +
+          "&value=" + encodeURIComponent(content)
+        : null;
+
+    /* Very long addresses are refused by browsers and GitHub */
+    if (url && url.length < 7500) {
+      window.open(url, "_blank", "noopener");
+
+      status(
+        "GitHub opened: click \"Commit changes\". " +
+        "The locations appear for everyone after the catalog update."
+      );
+
+      return;
+    }
+
+    downloadFile(name, content);
 
     status(
-      "catalog.json downloaded with " + written +
-      (written === 1 ? " location" : " locations")
+      "Downloaded " + name + ": upload it to the locations folder of the repository."
     );
+  }
+
+  function discardChanges() {
+    getChangedScans().forEach(function (scan) {
+      delete localPins[scan.id];
+    });
+
+    writeLocalPins();
+    rebuild();
+
+    status("Location changes discarded");
   }
 
   function createBar() {
@@ -625,9 +739,11 @@
 
     bar.innerHTML =
       '<span class="media-pin-bar-text"></span>' +
-      '<button type="button" class="measure-button" data-pins="download" ' +
-        'title="Download catalog.json with these locations, then upload it to the repository">' +
-        "Download catalog.json</button>";
+      '<button type="button" class="measure-button" data-pins="discard" ' +
+        'title="Undo the location changes made in this browser">Discard</button>' +
+      '<button type="button" class="measure-button media-pin-save" data-pins="save" ' +
+        'title="Commit these locations to the repository so every visitor sees them">' +
+        "Save for everyone</button>";
 
     bar.addEventListener(
       "pointerdown",
@@ -639,8 +755,19 @@
     bar.addEventListener(
       "click",
       function (event) {
-        if (event.target.closest('[data-pins="download"]')) {
-          downloadCatalog();
+        var button =
+          event.target.closest("[data-pins]");
+
+        if (!button) {
+          return;
+        }
+
+        if (button.dataset.pins === "save") {
+          saveForEveryone();
+        }
+
+        if (button.dataset.pins === "discard") {
+          discardChanges();
         }
       }
     );
@@ -655,26 +782,51 @@
       return;
     }
 
-    var ids =
-      getCatalog()
-        .filter(function (scan) {
-          return localPins[scan.id];
-        })
-        .map(function (scan) {
-          return scan.id;
-        });
+    var count =
+      getChangedScans().length;
 
     bar.classList.toggle(
       "hidden",
-      ids.length === 0
+      count === 0
     );
 
     bar.querySelector(".media-pin-bar-text").textContent =
-      ids.length +
-      (ids.length === 1 ? " location" : " locations") +
-      " saved in this browser";
+      count +
+      (count === 1 ? " location change" : " location changes") +
+      " in this browser only";
   }
 
+
+  /* ------------------------------------------------------------------------ */
+  /* SHOW / HIDE                                                              */
+  /* ------------------------------------------------------------------------ */
+
+  function updateToggleButton() {
+    var button =
+      document.getElementById("toggleMediaIcons");
+
+    if (!button) {
+      return;
+    }
+
+    button.textContent =
+      visible ? "Hide Icons" : "Show Icons";
+
+    button.setAttribute(
+      "aria-pressed",
+      String(visible)
+    );
+  }
+
+  function setVisible(value) {
+    visible = Boolean(value);
+
+    writeVisibility();
+    updateToggleButton();
+    updatePins();
+
+    status(visible ? "Media icons shown" : "Media icons hidden");
+  }
 
   /* ------------------------------------------------------------------------ */
   /* STARTUP                                                                  */
@@ -694,15 +846,35 @@
         tag !== "input" &&
         tag !== "textarea" &&
         tag !== "select" &&
-        !(event.target && event.target.isContentEditable) &&
-        pinElements.size > 0
+        !(event.target && event.target.isContentEditable)
       ) {
-        visible = !visible;
-        updatePins();
-        status(visible ? "Media icons shown" : "Media icons hidden");
+        setVisible(!visible);
       }
     }
   );
+
+  function bindToggleButton() {
+    var button =
+      document.getElementById("toggleMediaIcons");
+
+    if (button) {
+      button.addEventListener("click", function () {
+        setVisible(!visible);
+      });
+    }
+
+    updateToggleButton();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      bindToggleButton,
+      { once: true }
+    );
+  } else {
+    bindToggleButton();
+  }
 
   window.MediaPins = {
     handlePointerDown: handlePointerDown,
@@ -710,8 +882,9 @@
     /* Called by app.js whenever the catalog is (re)loaded */
     refresh: function () {
       rebuild();
-      loadRawCatalog();
     },
+
+    setVisible: setVisible,
 
     parseLocation: parseLocation
   };
