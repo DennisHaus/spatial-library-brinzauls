@@ -6,12 +6,20 @@ on:
       - main
     paths:
       - "scans/**"
+      # Media locations saved from the viewer ("Save for everyone")
+      - "locations/**"
       - "scripts/generate_catalog.py"
 
   workflow_dispatch:
 
 permissions:
   contents: write
+
+# If several uploads or locations are committed quickly one after the
+# other, run the updates one at a time instead of in parallel.
+concurrency:
+  group: update-catalog
+  cancel-in-progress: false
 
 jobs:
   update-catalog:
@@ -43,5 +51,14 @@ jobs:
             echo "catalog.json is already up to date."
           else
             git commit -m "Automatically update catalog"
-            git push
+
+            # Someone may have pushed in the meantime: rebase and retry
+            for attempt in 1 2 3; do
+              if git push; then
+                break
+              fi
+
+              echo "Push rejected, retrying after rebase ($attempt)"
+              git pull --rebase origin main
+            done
           fi
