@@ -2044,6 +2044,10 @@ button:active {
   }
 }
 
+.measure-distance {
+  text-anchor: middle;
+}
+
 .measure-marker text,
 .measure-distance {
   fill: #ffffff;
@@ -2179,5 +2183,159 @@ button:active {
 }
 
 .measure-panel.hidden {
+  display: none;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* MEDIA PINS                                                                 */
+/* -------------------------------------------------------------------------- */
+
+.media-pin-layer {
+  position: absolute;
+  z-index: 11;
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.media-pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1.5px solid #ffffff;
+  border-radius: 50%;
+
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.78);
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+
+  cursor: pointer !important;
+  pointer-events: auto;
+
+  will-change: transform;
+}
+
+.media-pin svg {
+  width: 15px;
+  height: 15px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.media-pin svg .fill,
+.media-pin svg circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.media-pin:hover,
+.media-pin:focus-visible,
+.media-pin.is-current {
+  color: #000000;
+  background: #ffffff;
+  outline: none;
+}
+
+.media-pin-label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 7px);
+
+  padding: 4px 7px;
+
+  border: 1px solid var(--border);
+
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.82);
+
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+
+  transform: translateY(-50%);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.media-pin:hover .media-pin-label,
+.media-pin:focus-visible .media-pin-label,
+.media-pin.is-current .media-pin-label {
+  opacity: 1;
+}
+
+.media-pin::after {
+  content: "";
+
+  position: absolute;
+  inset: -2px;
+
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.media-pin.is-new::after {
+  animation: media-pin-pulse 0.9s ease-out 2;
+}
+
+@keyframes media-pin-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+.media-pin-bar {
+  position: absolute;
+  z-index: 16;
+
+  right: 16px;
+  bottom: 17px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  max-width: calc(100% - 32px);
+  padding: 6px 6px 6px 10px;
+
+  border: 1px solid var(--border);
+
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.82);
+
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.media-pin-bar.hidden {
   display: none;
 }

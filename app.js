@@ -1405,8 +1405,39 @@ function normalizeScan(
       scan.uploadedAt ||
       "",
 
+    /* Optional [x, y, z] where a media file is pinned in the view */
+    location:
+      parseScanLocation(
+        scan.location
+      ),
+
     loading: false
   };
+}
+
+function parseScanLocation(
+  value
+) {
+  if (
+    !value
+  ) {
+    return null;
+  }
+
+  var list =
+    Array.isArray(value)
+      ? value
+      : [value.x, value.y, value.z];
+
+  var numbers =
+    list.slice(0, 3).map(Number);
+
+  return (
+    numbers.length === 3 &&
+    numbers.every(function (n) { return isFinite(n); })
+  )
+    ? { x: numbers[0], y: numbers[1], z: numbers[2] }
+    : null;
 }
 
 function resolveUrl(
@@ -1616,6 +1647,10 @@ function updateScanCount() {
   );
   if (window.UsageStats) {
     window.UsageStats.setDocuments(count);
+  }
+
+  if (window.MediaPins) {
+    window.MediaPins.refresh();
   }
 }
 
@@ -10380,6 +10415,14 @@ function bindNavigationMouse(
   surface.addEventListener(
     "pointerdown",
     function (event) {
+      /* Shift + Cmd/Ctrl-click: pin the front media file here */
+      if (
+        window.MediaPins &&
+        window.MediaPins.handlePointerDown(event)
+      ) {
+        return;
+      }
+
       /* Cmd/Ctrl-click: measure points instead of moving the camera */
       if (
         window.MeasureTool &&

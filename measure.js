@@ -529,8 +529,36 @@
       line.setAttribute("y2", screen[1].y);
       line.style.display = "";
 
-      label.setAttribute("x", (screen[0].x + screen[1].x) / 2 + 8);
-      label.setAttribute("y", (screen[0].y + screen[1].y) / 2 - 8);
+      /*
+        The label sits above the middle of the line. When A and B are
+        close together on screen, it is raised above both markers so
+        it never covers them.
+      */
+      var midX =
+        (screen[0].x + screen[1].x) / 2;
+
+      var midY =
+        (screen[0].y + screen[1].y) / 2;
+
+      var screenLength =
+        Math.hypot(
+          screen[1].x - screen[0].x,
+          screen[1].y - screen[0].y
+        );
+
+      var labelY =
+        midY - 16;
+
+      if (screenLength < 120) {
+        labelY =
+          Math.min(
+            labelY,
+            Math.min(screen[0].y, screen[1].y) - 30
+          );
+      }
+
+      label.setAttribute("x", midX);
+      label.setAttribute("y", labelY);
       label.textContent = formatNumber(getDeltas().distance, 2) + " m";
       label.style.display = "";
     } else {
@@ -613,6 +641,7 @@
     */
     return (
       (event.metaKey || event.ctrlKey) &&
+      !event.shiftKey &&
       (
         event.button === 0 ||
         (event.button === 2 && event.ctrlKey)
@@ -713,6 +742,7 @@
   window.MeasureTool = {
     handlePointerDown: handlePointerDown,
     clear: clear,
+    project: project,
     getPoints: function () {
       return points.slice();
     }

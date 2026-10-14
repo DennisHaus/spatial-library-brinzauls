@@ -244,6 +244,45 @@ window.LOCATION_CONFIG = {
     </section>
 
     <section>
+      <h3>Media locations</h3>
+
+      <p>
+        Images, videos and audio files can be linked to a place in the
+        point cloud. They appear there as small icons. Click an icon to
+        open the file.
+      </p>
+
+      <ul>
+        <li>
+          <strong>Set a location:</strong>
+          Open a media file from the library, then Shift + ⌘-click
+          (Mac) or Shift + Ctrl-click (Windows) on a point of a scan.
+          The location applies to the media window in front.
+          Doing it again moves the icon.
+        </li>
+
+        <li>
+          <strong>Remove a location:</strong>
+          Shift + ⌘/Ctrl-click on the icon.
+        </li>
+
+        <li>
+          <strong>P key:</strong>
+          Shows or hides all media icons.
+        </li>
+
+        <li>
+          <strong>Saving:</strong>
+          New locations are saved in your browser and are still there
+          on your next visit, but only on this computer. To make them
+          visible to everyone, use "Download catalog.json" at the
+          bottom right of the viewer and upload the file to the
+          repository, replacing the existing catalog.json.
+        </li>
+      </ul>
+    </section>
+
+    <section>
       <h3>Model library</h3>
 
       <ul>
