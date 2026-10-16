@@ -1584,8 +1584,12 @@ function normalizeScan(
   var url =
     "";
 
+    var isAbsolute =
+    /^https?:\/\//i.test(suppliedUrl);
+
   if (
-    suppliedUrl
+    suppliedUrl &&
+    (isAbsolute || !CONFIG.useRawBaseForPaths)
   ) {
     url =
       resolveUrl(
@@ -1720,6 +1724,9 @@ function resolveUrl(
 function buildRawUrl(
   path
 ) {
+  path =
+    String(path).replace(/^\.\//, "");
+
   var base =
     CONFIG.rawBaseUrl.replace(
       /\/+$/,

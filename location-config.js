@@ -55,7 +55,7 @@ window.LOCATION_CONFIG = {
   },
 
   uploadUrl:
-    "https://github.com/DennisHaus/spatial-library-brinzauls/upload/main/scans",
+    "https://dash.cloudflare.com/cda5eaaba44345e253835586b1cc1b29/r2/default/buckets/brinzauls",
 
   readmeTitle: "Spatial Library - Read Me",
 
@@ -67,12 +67,16 @@ window.LOCATION_CONFIG = {
     Keep this false when catalog.json contains relative paths,
     for example: scans/scan-01.copc.laz
   */
-  useRawBaseForPaths: false,
+  useRawBaseForPaths: true,
 
   rawBaseUrl:
-    "https://raw.githubusercontent.com/DennisHaus/pointcloud_viewer/main",
+    "https://pub-94c79225d4a04ec5ae8026f40699596b.r2.dev",
 
   downloadPassword: "Voser",
+
+  /* Needed now, because uploadUrl no longer points to GitHub */
+  locationsSaveUrl:
+    "https://github.com/DennisHaus/spatial-library-brinzauls/new/main/locations",
 
   /*
     Shift added to the coordinates shown when measuring.
