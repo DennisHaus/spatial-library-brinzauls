@@ -1725,7 +1725,9 @@ function buildRawUrl(
   path
 ) {
   path =
-    String(path).replace(/^\.\//, "");
+      String(path)
+        .replace(/^\.\//, "")
+        .replace(/^scans\//, "");
 
   var base =
     CONFIG.rawBaseUrl.replace(
@@ -1755,6 +1757,7 @@ function buildRawUrl(
     encodedPath
   );
 }
+
 
 function reconcileLoadedClouds() {
   var catalogIds =
