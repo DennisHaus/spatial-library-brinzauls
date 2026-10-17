@@ -10272,6 +10272,23 @@ var NAVIGATION_HELP = {
     "Look: left drag · Walk: WASD/arrows (stays level) · Up/down: E/C · Glide: wheel · Speed: , ."
 };
 
+/* Shorter help on phones and tablets */
+var NAVIGATION_HELP_TOUCH = {
+  orbit:
+    "Orbit · Rotate: one finger · Zoom: pinch · Pan: two fingers · New center: double-tap · Measure: press and hold",
+  fly:
+    "Fly · Look around: one finger · Glide: pinch · Pan: two fingers · Look at point: double-tap · Measure: press and hold",
+  walk:
+    "Look: one finger · Glide: pinch · Pan: two fingers · Measure: press and hold"
+};
+
+function isTouchDevice() {
+  return Boolean(
+    window.matchMedia &&
+    window.matchMedia("(pointer: coarse)").matches
+  );
+}
+
 function smoothFactor(
   deltaSeconds,
   timeConstant
@@ -10625,7 +10642,7 @@ function setNavigationMode(
     help
   ) {
     help.textContent =
-      NAVIGATION_HELP[mode];
+      (isTouchDevice() ? NAVIGATION_HELP_TOUCH : NAVIGATION_HELP)[mode];
   }
 
   if (
@@ -10950,6 +10967,56 @@ function lookAtSmoothly(
   }
 }
 
+/*
+  Zoom by an amount in wheel pixels (positive = out, negative = in).
+  Used by the mouse wheel and by the two-finger pinch on touchscreens.
+*/
+function applyNavigationZoom(
+  amount
+) {
+  amount =
+    Math.max(-300, Math.min(300, amount));
+
+  if (
+    isOrthographic()
+  ) {
+    navigation.orthoTarget =
+      Math.max(
+        (navigation.orthoTarget || viewer.scene.view.radius || 1) *
+        Math.pow(1.0012, amount),
+        0.01
+      );
+
+    return;
+  }
+
+  if (
+    navigation.mode === "orbit"
+  ) {
+    navigation.holdPosition =
+      false;
+
+    navigation.targetRadius =
+      Math.max(
+        (navigation.targetRadius || getCanvasDistance()) *
+        Math.pow(1.0012, amount),
+        0.02
+      );
+  } else {
+    var speedScale =
+      (Number(state.navigationSpeed) || 0.35) /
+      (Number(CONFIG.navigationSpeed) || 0.35);
+
+    /* one wheel notch glides about 8% of the scene distance */
+    navigation.glide -=
+      (amount / 100) *
+      0.08 *
+      getCanvasDistance() *
+      speedScale /
+      CONFIG.glideTime;
+  }
+}
+
 function bindNavigationMouse(
   canvas
 ) {
@@ -10963,8 +11030,294 @@ function bindNavigationMouse(
     ) ||
     canvas;
 
+  /*
+    TOUCH
+    One finger:          rotate (like left drag)
+    Two fingers:         pinch to zoom, move both to pan
+    Double-tap:          new center / look at point (like double-click)
+    Press and hold:      measure a point (like Cmd/Ctrl-click)
+  */
+  var touches =
+    new Map();
+
+  var pinch =
+    null;
+
+  var lastTap =
+    null;
+
+  var lastTouchTime =
+    0;
+
+  var longPress =
+    null;
+
+  var LONG_PRESS_MS = 550;
+  var DOUBLE_TAP_MS = 300;
+  var TAP_SLOP_PX = 12;
+
+  function getPinch() {
+    var list =
+      Array.from(touches.values());
+
+    var a = list[0];
+    var b = list[1];
+
+    return {
+      x: (a.x + b.x) / 2,
+      y: (a.y + b.y) / 2,
+      distance: Math.hypot(a.x - b.x, a.y - b.y)
+    };
+  }
+
+  function cancelLongPress() {
+    if (longPress) {
+      clearTimeout(longPress.timer);
+      longPress = null;
+    }
+  }
+
+  function pickAtClient(
+    clientX,
+    clientY
+  ) {
+    var rect =
+      canvas.getBoundingClientRect();
+
+    return pickPointAt(
+      clientX - rect.left,
+      clientY - rect.top
+    );
+  }
+
+  function startLook(
+    pointerId,
+    x,
+    y
+  ) {
+    navigation.drag = {
+      id: pointerId,
+      type: "look",
+      x: x,
+      y: y
+    };
+  }
+
+  function touchDown(event) {
+    event.preventDefault();
+
+    lastTouchTime =
+      performance.now();
+
+    touches.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY
+    });
+
+    try {
+      surface.setPointerCapture(
+        event.pointerId
+      );
+    } catch (
+      error
+    ) {
+      /* ignore */
+    }
+
+    navigation.holdPosition =
+      false;
+
+    if (touches.size === 1) {
+      startLook(
+        event.pointerId,
+        event.clientX,
+        event.clientY
+      );
+
+      /* Double-tap */
+      var now =
+        performance.now();
+
+      if (
+        lastTap &&
+        now - lastTap.time < DOUBLE_TAP_MS &&
+        Math.hypot(
+          event.clientX - lastTap.x,
+          event.clientY - lastTap.y
+        ) < TAP_SLOP_PX * 3
+      ) {
+        lastTap = null;
+
+        var point =
+          pickAtClient(
+            event.clientX,
+            event.clientY
+          );
+
+        if (point) {
+          lookAtSmoothly(point);
+        }
+
+        return;
+      }
+
+      lastTap = {
+        time: now,
+        x: event.clientX,
+        y: event.clientY
+      };
+
+      /* Press and hold: measure */
+      longPress = {
+        x: event.clientX,
+        y: event.clientY,
+        timer: setTimeout(function () {
+          var press = longPress;
+
+          longPress = null;
+          lastTap = null;
+
+          if (
+            !press ||
+            touches.size !== 1 ||
+            !window.MeasureTool
+          ) {
+            return;
+          }
+
+          /* Stop rotating, then measure as if Cmd/Ctrl-clicked */
+          navigation.drag = null;
+
+          window.MeasureTool.handlePointerDown({
+            clientX: press.x,
+            clientY: press.y,
+            button: 0,
+            metaKey: true,
+            ctrlKey: false,
+            shiftKey: false,
+            preventDefault: function () {}
+          });
+
+          if (navigator.vibrate) {
+            navigator.vibrate(15);
+          }
+        }, LONG_PRESS_MS)
+      };
+
+      return;
+    }
+
+    /* Second finger: switch from rotating to pinch and pan */
+    cancelLongPress();
+    lastTap = null;
+    navigation.drag = null;
+
+    if (touches.size === 2) {
+      pinch = getPinch();
+    }
+  }
+
+  function touchMove(event) {
+    if (!touches.has(event.pointerId)) {
+      return false;
+    }
+
+    event.preventDefault();
+
+    touches.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY
+    });
+
+    if (
+      longPress &&
+      Math.hypot(
+        event.clientX - longPress.x,
+        event.clientY - longPress.y
+      ) > TAP_SLOP_PX
+    ) {
+      cancelLongPress();
+      lastTap = null;
+    }
+
+    if (
+      touches.size >= 2 &&
+      pinch
+    ) {
+      var current =
+        getPinch();
+
+      if (
+        pinch.distance > 0 &&
+        current.distance > 0
+      ) {
+        /* Fingers apart = zoom in, together = zoom out */
+        applyNavigationZoom(
+          Math.log(pinch.distance / current.distance) /
+          Math.log(1.0012)
+        );
+      }
+
+      panView(
+        current.x - pinch.x,
+        current.y - pinch.y,
+        canvas
+      );
+
+      pinch = current;
+
+      return true;
+    }
+
+    /* One finger: let the normal drag code rotate */
+    return false;
+  }
+
+  function touchUp(event) {
+    if (!touches.has(event.pointerId)) {
+      return;
+    }
+
+    touches.delete(event.pointerId);
+    cancelLongPress();
+
+    lastTouchTime =
+      performance.now();
+
+    if (touches.size >= 2) {
+      pinch = getPinch();
+      return;
+    }
+
+    pinch = null;
+
+    if (touches.size === 1) {
+      /* Back to one finger: continue rotating from where it is, without a jump */
+      var remaining =
+        Array.from(touches.entries())[0];
+
+      startLook(
+        remaining[0],
+        remaining[1].x,
+        remaining[1].y
+      );
+
+      return;
+    }
+
+    navigation.drag = null;
+  }
+
   surface.addEventListener(
     "contextmenu",
+    function (event) {
+      event.preventDefault();
+    }
+  );
+
+  /* Older iOS Safari: stop the page itself from zooming */
+  surface.addEventListener(
+    "gesturestart",
     function (event) {
       event.preventDefault();
     }
@@ -10973,6 +11326,13 @@ function bindNavigationMouse(
   surface.addEventListener(
     "pointerdown",
     function (event) {
+      if (
+        event.pointerType === "touch"
+      ) {
+        touchDown(event);
+        return;
+      }
+
       /* Shift + Cmd/Ctrl-click: pin the front media file here */
       if (
         window.MediaPins &&
@@ -11041,6 +11401,13 @@ function bindNavigationMouse(
   surface.addEventListener(
     "pointermove",
     function (event) {
+      if (
+        event.pointerType === "touch" &&
+        touchMove(event)
+      ) {
+        return;
+      }
+
       var drag =
         navigation.drag;
 
@@ -11091,6 +11458,13 @@ function bindNavigationMouse(
   var endDrag =
     function (event) {
       if (
+        event.pointerType === "touch"
+      ) {
+        touchUp(event);
+        return;
+      }
+
+      if (
         navigation.drag &&
         navigation.drag.id === event.pointerId
       ) {
@@ -11122,47 +11496,9 @@ function bindNavigationMouse(
         event.deltaY *
         (event.deltaMode === 1 ? 33 : event.deltaMode === 2 ? 400 : 1);
 
-      amount =
-        Math.max(-300, Math.min(300, amount));
-
-      if (
-        isOrthographic()
-      ) {
-        navigation.orthoTarget =
-          Math.max(
-            (navigation.orthoTarget || viewer.scene.view.radius || 1) *
-            Math.pow(1.0012, amount),
-            0.01
-          );
-
-        return;
-      }
-
-      if (
-        navigation.mode === "orbit"
-      ) {
-        navigation.holdPosition =
-          false;
-
-        navigation.targetRadius =
-          Math.max(
-            (navigation.targetRadius || getCanvasDistance()) *
-            Math.pow(1.0012, amount),
-            0.02
-          );
-      } else {
-        var speedScale =
-          (Number(state.navigationSpeed) || 0.35) /
-          (Number(CONFIG.navigationSpeed) || 0.35);
-
-        /* one wheel notch glides about 8% of the scene distance */
-        navigation.glide -=
-          (amount / 100) *
-          0.08 *
-          getCanvasDistance() *
-          speedScale /
-          CONFIG.glideTime;
-      }
+      applyNavigationZoom(
+        amount
+      );
     },
     { passive: false }
   );
@@ -11178,13 +11514,17 @@ function bindNavigationMouse(
         return;
       }
 
-      var rect =
-        canvas.getBoundingClientRect();
+      /* Touch double-taps are already handled above */
+      if (
+        performance.now() - lastTouchTime < 800
+      ) {
+        return;
+      }
 
       var point =
-        pickPointAt(
-          event.clientX - rect.left,
-          event.clientY - rect.top
+        pickAtClient(
+          event.clientX,
+          event.clientY
         );
 
       if (
