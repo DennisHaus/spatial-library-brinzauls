@@ -2,18 +2,6 @@
   "version": 1,
   "scans": [
     {
-      "id": "scans-2058-brienzauls-3x-4347x3591",
-      "name": "2058 Brienzauls 3x 4347x3591",
-      "filename": "2058-Brienzauls_3x_4347x3591.png",
-      "path": "./scans/2058-Brienzauls_3x_4347x3591.png",
-      "url": "./scans/2058-Brienzauls_3x_4347x3591.png",
-      "format": "png",
-      "sizeBytes": 22650523,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-19"
-    },
-    {
       "id": "scans-brinzauls-years-2020-brienzauls",
       "name": "2020 Brienzauls",
       "filename": "2020 Brienzauls.copc.laz",
@@ -103,86 +91,28 @@
       ]
     },
     {
-      "id": "scans-stallikon-test-stallikon-15mio",
-      "name": "Stallikon 15mio",
-      "filename": "stallikon_15mio.copc.laz",
-      "path": "./scans/Stallikon Test/stallikon_15mio.copc.laz",
-      "url": "./scans/Stallikon Test/stallikon_15mio.copc.laz",
-      "format": "copc",
-      "sizeBytes": 77992273,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-09-28"
-    },
-    {
-      "id": "scans-stallikon-test-stallikon-5mio-edit",
-      "name": "Stallikon 5mio Edit",
-      "filename": "stallikon_5mio_edit.copc.laz",
-      "path": "./scans/Stallikon Test/stallikon_5mio_edit.copc.laz",
-      "url": "./scans/Stallikon Test/stallikon_5mio_edit.copc.laz",
-      "format": "copc",
-      "sizeBytes": 31602374,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-09-28"
-    },
-    {
-      "id": "scans-studentgroup1-bildschirmaufnahme-2026-05-19-um-18-28-45",
-      "name": "Bildschirmaufnahme 2026 05 19 Um 18.28.45",
-      "filename": "Bildschirmaufnahme 2026-05-19 um 18.28.45.mp4",
-      "path": "./scans/StudentGroup1/Bildschirmaufnahme 2026-05-19 um 18.28.45.mp4",
-      "url": "./scans/StudentGroup1/Bildschirmaufnahme 2026-05-19 um 18.28.45.mp4",
-      "format": "mp4",
-      "sizeBytes": 63653801,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-02",
-      "location": [
-        71.76,
-        -174.49,
-        1137.71
-      ]
-    },
-    {
-      "id": "scans-studentgroup1-brinzauls-under-landslide",
-      "name": "Brinzauls Under Landslide",
-      "filename": "Brinzauls under Landslide.png",
-      "path": "./scans/StudentGroup1/Brinzauls under Landslide.png",
-      "url": "./scans/StudentGroup1/Brinzauls under Landslide.png",
+      "id": "scans-studentname1-name2-2058-brienzauls-3x-4347x3591",
+      "name": "2058 Brienzauls 3x 4347x3591",
+      "filename": "2058-Brienzauls_3x_4347x3591.png",
+      "path": "./scans/StudentName1_Name2/2058-Brienzauls_3x_4347x3591.png",
+      "url": "./scans/StudentName1_Name2/2058-Brienzauls_3x_4347x3591.png",
       "format": "png",
-      "sizeBytes": 1577842,
+      "sizeBytes": 22650523,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-01",
-      "location": [
-        -131.66,
-        103.92,
-        1175.64
-      ]
+      "uploadedAt": "2026-10-19"
     },
     {
-      "id": "scans-studentgroup1-skizzen",
-      "name": "Skizzen",
-      "filename": "Skizzen.png",
-      "path": "./scans/StudentGroup1/Skizzen.png",
-      "url": "./scans/StudentGroup1/Skizzen.png",
+      "id": "scans-studentname3-name4-bildschirmfoto-2026-10-18-um-08-55-10",
+      "name": "Bildschirmfoto 2026 10 18 Um 08.55.10",
+      "filename": "Bildschirmfoto 2026-10-18 um 08.55.10.png",
+      "path": "./scans/StudentName3_Name4/Bildschirmfoto 2026-10-18 um 08.55.10.png",
+      "url": "./scans/StudentName3_Name4/Bildschirmfoto 2026-10-18 um 08.55.10.png",
       "format": "png",
-      "sizeBytes": 1963387,
+      "sizeBytes": 4158586,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-01"
-    },
-    {
-      "id": "scans-studentgroup1-stallikon-5mio-edit",
-      "name": "Stallikon 5mio Edit",
-      "filename": "stallikon_5mio_edit.copc.laz",
-      "path": "./scans/StudentGroup1/stallikon_5mio_edit.copc.laz",
-      "url": "./scans/StudentGroup1/stallikon_5mio_edit.copc.laz",
-      "format": "copc",
-      "sizeBytes": 31602374,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-01"
+      "uploadedAt": "2026-10-19"
     },
     {
       "id": "scans-haus-zur-laterne",
