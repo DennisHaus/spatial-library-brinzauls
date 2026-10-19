@@ -10248,7 +10248,7 @@ bindDescriptionDialog();
 */
 
 var navigation = {
-  mode: "fly",
+  mode: "orbit",
   controls: null,
   pivot: null,
   radius: null,
