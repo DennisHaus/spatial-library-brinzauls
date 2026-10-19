@@ -13,7 +13,8 @@ on:
   # Files uploaded to Cloudflare R2 don't trigger GitHub,
   # so the bucket is checked regularly as well.
   schedule:
-    - cron: "*/5 * * * *"
+       - cron: "2-59/5 * * * *"
+
 
   # "Run workflow" button in the Actions tab, to update right away
   workflow_dispatch:
