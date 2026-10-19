@@ -25,6 +25,15 @@ var CONFIG = {
     LOCATION_CONFIG.catalogUrl ||
     "./catalog.json",
 
+  /*
+    Optional Cloudflare Worker that lists the R2 bucket live.
+    When set, new uploads appear immediately; catalog.json still
+    provides names and media locations.
+  */
+  liveCatalogUrl:
+    LOCATION_CONFIG.liveCatalogUrl ||
+    "",
+
   defaultPointBudget:
     30000000,
 
@@ -863,76 +872,160 @@ function disableXROnViewer() {
 /* CATALOG                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function loadCatalog() {
+/*
+  Fetches a catalog file and returns its list of entries.
+*/
+function fetchCatalogEntries(
+  url
+) {
   var separator =
-    CONFIG.catalogUrl.indexOf(
-      "?"
-    ) === -1
+    url.indexOf("?") === -1
       ? "?"
       : "&";
 
-  var requestUrl =
-    CONFIG.catalogUrl +
-    separator +
-    "cacheBust=" +
-    Date.now();
-
   return fetch(
-    requestUrl,
+    url + separator + "cacheBust=" + Date.now(),
     {
       cache: "no-store"
     }
   )
-    .then(
-      function (response) {
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            "Catalog request failed with HTTP " +
-            response.status
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error(
+          "Catalog request failed with HTTP " +
+          response.status
+        );
+      }
+
+      return response.json();
+    })
+    .then(function (data) {
+      var entries = [];
+
+      if (Array.isArray(data)) {
+        entries = data;
+      } else if (data && Array.isArray(data.scans)) {
+        entries = data.scans;
+      } else if (data && Array.isArray(data.folders)) {
+        entries = data.folders;
+      }
+
+      return flattenCatalogEntries(
+        entries,
+        ""
+      );
+    });
+}
+
+function catalogPathKey(
+  scan
+) {
+  return String(
+    (scan && (scan.path || scan.url)) || ""
+  ).replace(/^\.\//, "");
+}
+
+/*
+  The live list decides which files exist. Matching entries from
+  catalog.json add what only GitHub knows: names, ids, upload dates
+  and media locations.
+*/
+function mergeLiveCatalog(
+  liveScans,
+  githubScans
+) {
+  var byPath =
+    new Map();
+
+  githubScans.forEach(function (scan) {
+    byPath.set(
+      catalogPathKey(scan),
+      scan
+    );
+  });
+
+  return liveScans.map(function (live) {
+    var previous =
+      byPath.get(
+        catalogPathKey(live)
+      );
+
+    if (!previous) {
+      return live;
+    }
+
+    return Object.assign(
+      {},
+      live,
+      previous,
+      {
+        filename: live.filename,
+        path: live.path,
+        url: live.url,
+        format: live.format,
+        sizeBytes: live.sizeBytes
+      }
+    );
+  });
+}
+
+function loadCatalog() {
+  var githubRequest =
+    fetchCatalogEntries(
+      CONFIG.catalogUrl
+    );
+
+  var request;
+
+  if (CONFIG.liveCatalogUrl) {
+    request =
+      Promise.all([
+        fetchCatalogEntries(
+          CONFIG.liveCatalogUrl
+        ).catch(function (error) {
+          console.warn(
+            "Live file list unavailable, using catalog.json only:",
+            error
+          );
+
+          return null;
+        }),
+
+        githubRequest.catch(function (error) {
+          console.warn(
+            "catalog.json unavailable, using the live file list only:",
+            error
+          );
+
+          return null;
+        })
+      ]).then(function (results) {
+        var live = results[0];
+        var github = results[1];
+
+        if (live) {
+          return mergeLiveCatalog(
+            live,
+            github || []
           );
         }
 
-        return response.json();
-      }
-    )
+        if (github) {
+          return github;
+        }
+
+        throw new Error(
+          "Neither the live file list nor catalog.json could be loaded."
+        );
+      });
+  } else {
+    request =
+      githubRequest;
+  }
+
+  return request
     .then(
-      function (data) {
-        var entries =
-  [];
-
-if (
-  Array.isArray(
-    data
-  )
-) {
-  entries =
-    data;
-} else if (
-  data &&
-  Array.isArray(
-    data.scans
-  )
-) {
-  entries =
-    data.scans;
-} else if (
-  data &&
-  Array.isArray(
-    data.folders
-  )
-) {
-  entries =
-    data.folders;
-}
-
-var scans =
-  flattenCatalogEntries(
-    entries,
-    ""
-  );
-
+      function (scans) {
         var previousScans =
           new Map();
 

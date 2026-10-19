@@ -13,6 +13,10 @@ window.LOCATION_CONFIG = {
     BRINZAULS
   `,
 
+  catalogUrl: "./catalog.json",
+
+liveCatalogUrl: "https://brinzauls.wi-251124.workers.dev",
+
   brandSubtitle: `
   copc viewer & point cloud model interface | for collecting, storing and
   visualizing spatial recordings and spatial visions of Brienz/Brinzauls
