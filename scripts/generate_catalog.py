@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import date
 import json
+import os
 import re
 import subprocess
 
@@ -279,6 +280,105 @@ def is_supported_file(file):
     )
 
 
+def r2_settings():
+    """
+    R2 access from environment variables (GitHub secrets).
+    Returns None when they are not set, so the script still works
+    locally or without R2.
+    """
+    names = (
+        "R2_ACCOUNT_ID",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET",
+    )
+
+    values = {name: os.environ.get(name, "").strip() for name in names}
+
+    if not all(values.values()):
+        return None
+
+    return values
+
+
+def list_r2_files(settings):
+    """
+    Lists every supported file in the R2 bucket.
+
+    The bucket root corresponds to the scans/ folder, so the key
+    "Brinzauls Years/2020 Brienzauls.copc.laz" becomes the catalog path
+    "./scans/Brinzauls Years/2020 Brienzauls.copc.laz".
+
+    Returns a list of (relative path, size in bytes, upload date).
+    """
+    import boto3
+
+    client = boto3.client(
+        "s3",
+        endpoint_url=(
+            "https://" + settings["R2_ACCOUNT_ID"] +
+            ".r2.cloudflarestorage.com"
+        ),
+        aws_access_key_id=settings["R2_ACCESS_KEY_ID"],
+        aws_secret_access_key=settings["R2_SECRET_ACCESS_KEY"],
+        region_name="auto",
+    )
+
+    files = []
+
+    paginator = client.get_paginator("list_objects_v2")
+
+    for page in paginator.paginate(Bucket=settings["R2_BUCKET"]):
+        for item in page.get("Contents", []):
+            key = item["Key"]
+
+            # Folders created in the dashboard end with "/"
+            if key.endswith("/"):
+                continue
+
+            filename = key.rsplit("/", 1)[-1]
+
+            if filename.startswith("."):
+                continue
+
+            if not filename.lower().endswith(SUPPORTED_SUFFIXES):
+                continue
+
+            files.append((
+                "scans/" + key,
+                int(item["Size"]),
+                item["LastModified"].date().isoformat(),
+            ))
+
+    return sorted(files)
+
+
+def list_repository_files():
+    """
+    Lists supported files in the scans/ folder of the repository.
+    Returns a list of (relative path, size in bytes, upload date).
+    """
+    if not SCANS_DIR.exists():
+        print("The scans folder does not exist.")
+        return []
+
+    files = []
+
+    for file in sorted(SCANS_DIR.rglob("*")):
+        if not is_supported_file(file):
+            continue
+
+        relative_path = file.relative_to(ROOT).as_posix()
+
+        files.append((
+            relative_path,
+            file.stat().st_size,
+            get_git_date(relative_path),
+        ))
+
+    return files
+
+
 def create_catalog():
     existing, previous_catalog = load_existing_catalog()
 
@@ -288,29 +388,28 @@ def create_catalog():
 
     scans = []
 
-    if not SCANS_DIR.exists():
-        print(
-            "The scans folder does not exist."
-        )
+    settings = r2_settings()
 
-        return
-
-    files = sorted(
-        file
-        for file in SCANS_DIR.rglob("*")
-        if is_supported_file(file)
-    )
+    if settings:
+        print("Reading files from R2 bucket:", settings["R2_BUCKET"])
+        files = list_r2_files(settings)
+    else:
+        print("No R2 settings found, reading the scans/ folder.")
+        files = list_repository_files()
 
     print(
         "Supported files found:",
         len(files)
     )
 
-    for file in files:
-        relative_path = (
-            file.relative_to(ROOT)
-            .as_posix()
-        )
+    if not files:
+        # Never replace a working catalog with an empty one,
+        # for example when R2 is unreachable or a key is wrong.
+        print("No files found. catalog.json is left unchanged.")
+        return
+
+    for relative_path, size_bytes, file_date in files:
+        filename = relative_path.rsplit("/", 1)[-1]
 
         catalog_path = (
             "./" + relative_path
@@ -324,7 +423,7 @@ def create_catalog():
         )
 
         file_format = get_format(
-            file.name
+            filename
         )
 
         # Start from the previous entry so extra fields such as
@@ -342,11 +441,11 @@ def create_catalog():
             "name": previous.get(
                 "name",
                 human_name(
-                    file.name
+                    filename
                 )
             ),
 
-            "filename": file.name,
+            "filename": filename,
 
             "path": catalog_path,
 
@@ -354,7 +453,7 @@ def create_catalog():
 
             "format": file_format,
 
-            "sizeBytes": file.stat().st_size,
+            "sizeBytes": size_bytes,
 
             "pointCount": previous.get(
                 "pointCount",
@@ -368,9 +467,7 @@ def create_catalog():
 
             "uploadedAt": previous.get(
                 "uploadedAt",
-                get_git_date(
-                    relative_path
-                )
+                file_date
             )
         })
 
