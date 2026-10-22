@@ -12,7 +12,11 @@
     2. Shift + Cmd-click (Mac) or Shift + Ctrl-click (Windows) on a
        point of a scan. Doing it again moves the icon.
   Shift + Cmd/Ctrl-click on an icon removes the location.
-  The "Hide Icons" button or the P key shows or hides all icons.
+  The icons button or the P key cycles through three modes:
+    all     - every icon is shown
+    folders - only icons whose folder is expanded in the library
+              (icons outside any folder are always shown)
+    none    - no icons
 
   Where locations are stored:
     - First in this browser (localStorage), so they survive a reload.
@@ -41,7 +45,8 @@
   var layer = null;
   var bar = null;
   var frame = null;
-  var visible = readVisibility();
+  var MODES = ["all", "folders", "none"];
+  var mode = readMode();
   var pinElements = new Map();
 
   var ICONS = {
@@ -101,17 +106,25 @@
     }
   }
 
-  function readVisibility() {
+  function readMode() {
     try {
-      return window.localStorage.getItem(VISIBILITY_KEY) !== "false";
+      var stored =
+        window.localStorage.getItem(VISIBILITY_KEY);
+
+      /* Older versions stored "true" / "false" */
+      if (stored === "false") {
+        return "none";
+      }
+
+      return MODES.indexOf(stored) >= 0 ? stored : "all";
     } catch (error) {
-      return true;
+      return "all";
     }
   }
 
-  function writeVisibility() {
+  function writeMode() {
     try {
-      window.localStorage.setItem(VISIBILITY_KEY, String(visible));
+      window.localStorage.setItem(VISIBILITY_KEY, mode);
     } catch (error) {
       /* ignore */
     }
@@ -440,11 +453,14 @@
     }
 
     layer.style.display =
-      visible ? "" : "none";
+      mode === "none" ? "none" : "";
 
-    if (!visible) {
+    if (mode === "none") {
       return;
     }
+
+    var openFolders =
+      mode === "folders" ? getOpenFolderPaths() : null;
 
     var project =
       window.MeasureTool && window.MeasureTool.project;
@@ -466,7 +482,10 @@
       var element =
         entry.element;
 
-      if (!position) {
+      if (
+        !position ||
+        (openFolders && !isInOpenFolder(entry.scan, openFolders))
+      ) {
         element.style.display = "none";
         return;
       }
@@ -480,6 +499,51 @@
         Boolean(front && front.id === entry.scan.id)
       );
     });
+  }
+
+  /*
+    Folder paths that are actually visible in the library: the folder
+    itself and every parent folder must be expanded.
+  */
+  function getOpenFolderPaths() {
+    var open =
+      new Set();
+
+    document
+      .querySelectorAll("#libraryList details.scan-folder")
+      .forEach(function (folder) {
+        if (!folder.open || !folder.dataset.folderPath) {
+          return;
+        }
+
+        var parent =
+          folder.parentElement &&
+          folder.parentElement.closest("details.scan-folder");
+
+        while (parent) {
+          if (!parent.open) {
+            return;
+          }
+
+          parent =
+            parent.parentElement &&
+            parent.parentElement.closest("details.scan-folder");
+        }
+
+        open.add(folder.dataset.folderPath);
+      });
+
+    return open;
+  }
+
+  function isInOpenFolder(scan, openFolders) {
+    var path =
+      typeof window.normalizeFolderPath === "function"
+        ? window.normalizeFolderPath(scan.folderPath)
+        : String(scan.folderPath || "");
+
+    /* Media at the top level of the library has no folder to expand */
+    return !path || openFolders.has(path);
   }
 
   function loop() {
@@ -822,23 +886,39 @@
       return;
     }
 
-    button.textContent =
-      visible ? "Hide Icons" : "Show Icons";
+    button.textContent = {
+      all: "Icons: All",
+      folders: "Icons: Open Folders",
+      none: "Icons: Hidden"
+    }[mode];
 
     button.setAttribute(
       "aria-pressed",
-      String(visible)
+      String(mode !== "none")
     );
   }
 
-  function setVisible(value) {
-    visible = Boolean(value);
+  function setMode(value) {
+    mode = MODES.indexOf(value) >= 0 ? value : "all";
 
-    writeVisibility();
+    writeMode();
     updateToggleButton();
     updatePins();
 
-    status(visible ? "Media icons shown" : "Media icons hidden");
+    status({
+      all: "All media icons shown",
+      folders: "Media icons shown for expanded folders only",
+      none: "Media icons hidden"
+    }[mode]);
+  }
+
+  function cycleMode() {
+    setMode(MODES[(MODES.indexOf(mode) + 1) % MODES.length]);
+  }
+
+  /* Kept for older callers: true = all, false = none */
+  function setVisible(value) {
+    setMode(value ? "all" : "none");
   }
 
   /* ------------------------------------------------------------------------ */
@@ -861,7 +941,7 @@
         tag !== "select" &&
         !(event.target && event.target.isContentEditable)
       ) {
-        setVisible(!visible);
+        cycleMode();
       }
     }
   );
@@ -872,7 +952,7 @@
 
     if (button) {
       button.addEventListener("click", function () {
-        setVisible(!visible);
+        cycleMode();
       });
     }
 
@@ -898,6 +978,8 @@
     },
 
     setVisible: setVisible,
+
+    setMode: setMode,
 
     parseLocation: parseLocation
   };
