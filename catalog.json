@@ -62,6 +62,18 @@
       "uploadedAt": "2026-10-02"
     },
     {
+      "id": "scans-brinzauls-years-2026-brinzauls-allscans-15mio",
+      "name": "2026 Brinzauls Allscans 15mio",
+      "filename": "2026_Brinzauls_AllScans_15Mio.copc.laz",
+      "path": "./scans/Brinzauls Years/2026_Brinzauls_AllScans_15Mio.copc.laz",
+      "url": "./scans/Brinzauls Years/2026_Brinzauls_AllScans_15Mio.copc.laz",
+      "format": "copc",
+      "sizeBytes": 96181501,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-22"
+    },
+    {
       "id": "scans-brinzauls-years-2058-brienzauls",
       "name": "2058 Brienzauls",
       "filename": "2058_Brienzauls.copc.laz",
@@ -85,9 +97,9 @@
       "crs": null,
       "uploadedAt": "2026-10-14",
       "location": [
-        -102.4,
-        -6.67,
-        1144.73
+        258.29,
+        -235.55,
+        1116.61
       ]
     },
     {
@@ -126,11 +138,11 @@
       "crs": null,
       "uploadedAt": "2026-10-14",
       "location": [
-        156.83,
-        -128.09,
-        1142.34
+        115.19,
+        -87.09,
+        1152.29
       ]
     }
   ],
-  "locationsApplied": "2026-10-14-154705.json"
+  "locationsApplied": "2026-10-22-105313.json"
 }
