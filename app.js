@@ -2011,6 +2011,9 @@ function updateScanCount() {
   if (window.MediaPins) {
     window.MediaPins.refresh();
   }
+  if (window.Timeline) {
+    window.Timeline.refresh();
+  }
 }
 
 function buildLibraryTree(
@@ -3976,6 +3979,16 @@ function loadScan(
                 " loaded",
                 "idle"
               );
+
+              return;
+            }
+
+            /* The timeline loads years without moving the camera */
+            if (
+              scan.skipFitOnLoad
+            ) {
+              scan.skipFitOnLoad =
+                false;
 
               return;
             }

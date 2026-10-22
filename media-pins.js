@@ -484,7 +484,8 @@
 
       if (
         !position ||
-        (openFolders && !isInOpenFolder(entry.scan, openFolders))
+        (openFolders && !isInOpenFolder(entry.scan, openFolders)) ||
+        (window.Timeline && !window.Timeline.allows(entry.scan))
       ) {
         element.style.display = "none";
         return;

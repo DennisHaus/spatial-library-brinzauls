@@ -2521,3 +2521,74 @@ button:active {
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+
+/* -------------------------------------------------------------------------- */
+/* TIMELINE                                                                   */
+/* -------------------------------------------------------------------------- */
+
+#toggleTimeline[aria-pressed="false"] {
+  color: var(--muted);
+}
+
+.timeline-panel {
+  position: absolute;
+  z-index: 16;
+
+  /* Sits just above the viewer toolbar */
+  bottom: 64px;
+  left: 50%;
+
+  width: min(640px, calc(100% - 32px));
+  padding: 10px 14px 6px;
+
+  transform: translateX(-50%);
+
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.timeline-panel.hidden {
+  display: none;
+}
+
+.timeline-slider {
+  display: block;
+
+  width: 100%;
+  margin: 0;
+
+  accent-color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.timeline-stops {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 4px;
+}
+
+.timeline-stop {
+  min-height: 0;
+  padding: 2px 4px;
+
+  border: none;
+
+  color: var(--muted);
+  background: none;
+
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.timeline-stop:hover,
+.timeline-stop.is-active {
+  color: var(--accent-strong);
+  background: none;
+}
+
+.timeline-stop:focus-visible {
+  outline: 1px solid var(--border-light);
+}
