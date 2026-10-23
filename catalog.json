@@ -154,37 +154,54 @@
       ]
     },
     {
-      "id": "scans-studentname1-name2-2058-brienzauls-3x-4347x3591",
-      "name": "2058 Brienzauls 3x 4347x3591",
-      "filename": "2058-Brienzauls_3x_4347x3591.png",
-      "path": "./scans/StudentName1_Name2/2058-Brienzauls_3x_4347x3591.png",
-      "url": "./scans/StudentName1_Name2/2058-Brienzauls_3x_4347x3591.png",
-      "format": "png",
-      "sizeBytes": 22650523,
+      "id": "scans-raum-bis-blau-raum-bis-blau-dorfstruktur",
+      "name": "Raum Bis Blau Dorfstruktur",
+      "filename": "RAUM BIS BLAU_DORFSTRUKTUR.mp4",
+      "path": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_DORFSTRUKTUR.mp4",
+      "url": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_DORFSTRUKTUR.mp4",
+      "format": "mp4",
+      "sizeBytes": 172253,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-19",
+      "uploadedAt": "2026-10-23",
       "location": [
-        182.34,
-        -28.58,
-        1149.68
+        53.9,
+        -108.11,
+        1142.82
       ]
     },
     {
-      "id": "scans-studentname3-name4-bildschirmfoto-2026-10-18-um-08-55-10",
-      "name": "Bildschirmfoto 2026 10 18 Um 08.55.10",
-      "filename": "Bildschirmfoto 2026-10-18 um 08.55.10.png",
-      "path": "./scans/StudentName3_Name4/Bildschirmfoto 2026-10-18 um 08.55.10.png",
-      "url": "./scans/StudentName3_Name4/Bildschirmfoto 2026-10-18 um 08.55.10.png",
-      "format": "png",
-      "sizeBytes": 4158586,
+      "id": "scans-raum-bis-blau-raum-bis-blau-nachbarschaft",
+      "name": "Raum Bis Blau Nachbarschaft",
+      "filename": "RAUM BIS BLAU_NACHBARSCHAFT.mp4",
+      "path": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_NACHBARSCHAFT.mp4",
+      "url": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_NACHBARSCHAFT.mp4",
+      "format": "mp4",
+      "sizeBytes": 493355,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-19",
+      "uploadedAt": "2026-10-23",
       "location": [
-        -83.71,
-        104.41,
-        1153.45
+        51.68,
+        -93.44,
+        1144.07
+      ]
+    },
+    {
+      "id": "scans-raum-bis-blau-raum-bis-blau-parzelle",
+      "name": "Raum Bis Blau Parzelle",
+      "filename": "RAUM BIS BLAU_PARZELLE.mp4",
+      "path": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_PARZELLE.mp4",
+      "url": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_PARZELLE.mp4",
+      "format": "mp4",
+      "sizeBytes": 378564,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        44.98,
+        -92.35,
+        1156.48
       ]
     },
     {
@@ -205,5 +222,5 @@
       ]
     }
   ],
-  "locationsApplied": "2026-10-23-095018.json"
+  "locationsApplied": "2026-10-23-095822.json"
 }
