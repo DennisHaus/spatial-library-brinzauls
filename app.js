@@ -925,6 +925,89 @@ function fetchCatalogEntries(
   still be embedded in Markdown files. Applies to catalog.json and to
   the live R2 list alike.
 */
+/*
+  DISPLAY NAMES
+  What the library, media windows and icons show. The stored name is
+  not changed, so search, sorting and the timeline still use it.
+    - one leading single digit is dropped ("0_Strategie" -> "Strategie");
+      years like "2020" are kept
+    - words that also appear in the folder path are dropped, so
+      "0_Strategie_Brienz_blicken" in "Brienz Blicken" -> "Strategie"
+*/
+var NAME_SEPARATORS =
+  /[\s_\-.]+/;
+
+function stripLeadingDigit(
+  value
+) {
+  return String(value || "")
+    .trim()
+    .replace(/^\d(?:[\s_\-.]+|$)/, "");
+}
+
+function comparableWord(
+  word
+) {
+  return String(word)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function displayFolderName(
+  folderName
+) {
+  return stripLeadingDigit(folderName) ||
+    String(folderName || "");
+}
+
+function displayScanName(
+  scan
+) {
+  var original =
+    String(
+      (scan && (scan.name || scan.filename)) || ""
+    );
+
+  var base =
+    stripLeadingDigit(original);
+
+  var folderWords =
+    new Set();
+
+  String((scan && scan.folderPath) || "")
+    .split("/")
+    .forEach(function (part) {
+      stripLeadingDigit(part)
+        .split(NAME_SEPARATORS)
+        .forEach(function (word) {
+          /* Numbers in folder names never remove numbers (years) */
+          if (word && !/^\d+$/.test(word)) {
+            folderWords.add(comparableWord(word));
+          }
+        });
+    });
+
+  var words =
+    base
+      .split(NAME_SEPARATORS)
+      .filter(Boolean);
+
+  var kept =
+    words.filter(function (word) {
+      return !folderWords.has(comparableWord(word));
+    });
+
+  if (kept.length === words.length) {
+    return base || original;
+  }
+
+  /* If every word is in the folder name, keep the full name */
+  return kept.length
+    ? kept.join(" ")
+    : base || original;
+}
+
 function isInHiddenFolder(
   scan
 ) {
@@ -2342,8 +2425,9 @@ function createScanCard(
 
 
   name.textContent =
-    scan.name;
+    displayScanName(scan);
 
+  /* The tooltip keeps the full name */
   name.title =
     scan.name;
 
@@ -2632,7 +2716,7 @@ function renderLibraryTree(
         );
 
       summary.textContent =
-        folderName;
+        displayFolderName(folderName);
 
       var count =
         document.createElement(
@@ -2920,9 +3004,13 @@ function openImagePopup(
     "image-popup-title";
 
   title.textContent =
+    displayScanName(scan) ||
+    "Media";
+
+  title.title =
     scan.name ||
     scan.filename ||
-    "Media";
+    "";
 
   var closeButton =
     document.createElement(

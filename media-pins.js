@@ -370,7 +370,9 @@
       '<span class="media-pin-label"></span>';
 
     pin.querySelector(".media-pin-label").textContent =
-      scan.name;
+      typeof window.displayScanName === "function"
+        ? window.displayScanName(scan)
+        : scan.name;
 
     pin.setAttribute(
       "aria-label",
@@ -641,7 +643,9 @@
           "media-pin-folder";
 
         folderLine.textContent =
-          path.split("/").pop();
+          typeof window.displayFolderName === "function"
+            ? window.displayFolderName(path.split("/").pop())
+            : path.split("/").pop();
 
         label.appendChild(folderLine);
       }
