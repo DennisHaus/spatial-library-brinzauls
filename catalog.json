@@ -112,7 +112,12 @@
       "sizeBytes": 22650523,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-19"
+      "uploadedAt": "2026-10-19",
+      "location": [
+        182.34,
+        -28.58,
+        1149.68
+      ]
     },
     {
       "id": "scans-studentname3-name4-bildschirmfoto-2026-10-18-um-08-55-10",
@@ -124,7 +129,12 @@
       "sizeBytes": 4158586,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-19"
+      "uploadedAt": "2026-10-19",
+      "location": [
+        -83.71,
+        104.41,
+        1153.45
+      ]
     },
     {
       "id": "scans-haus-zur-laterne",
@@ -144,5 +154,5 @@
       ]
     }
   ],
-  "locationsApplied": "2026-10-22-105313.json"
+  "locationsApplied": "2026-10-23-092856.json"
 }
