@@ -71,7 +71,12 @@
       "sizeBytes": 1794,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        144.84,
+        -159.98,
+        1137.63
+      ]
     },
     {
       "id": "scans-bewahren-und-beleben-bewahren-und-beleben-dorfstruktur",
@@ -83,7 +88,12 @@
       "sizeBytes": 881932,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        53.5,
+        -113.97,
+        1142.63
+      ]
     },
     {
       "id": "scans-bewahren-und-beleben-bewahren-und-beleben-nachbarschaft",
@@ -95,7 +105,12 @@
       "sizeBytes": 574598,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        99.7,
+        -156.94,
+        1141.66
+      ]
     },
     {
       "id": "scans-bewahren-und-beleben-bewahren-und-beleben-parzelle",
@@ -107,7 +122,12 @@
       "sizeBytes": 846591,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        131.09,
+        -164.88,
+        1146.27
+      ]
     },
     {
       "id": "scans-brienz-blicken-0-strategie-brienz-blicken",
@@ -119,7 +139,12 @@
       "sizeBytes": 830,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        75.43,
+        -168.17,
+        1140.36
+      ]
     },
     {
       "id": "scans-brienz-blicken-brienz-blicken-dorfstruktur",
@@ -133,9 +158,9 @@
       "crs": null,
       "uploadedAt": "2026-10-23",
       "location": [
-        104.68,
-        -163.46,
-        1141.44
+        106.49,
+        -168.56,
+        1149.39
       ]
     },
     {
@@ -150,9 +175,9 @@
       "crs": null,
       "uploadedAt": "2026-10-23",
       "location": [
-        97.28,
-        -158.99,
-        1141.28
+        97.32,
+        -155.51,
+        1141.96
       ]
     },
     {
@@ -167,22 +192,10 @@
       "crs": null,
       "uploadedAt": "2026-10-23",
       "location": [
-        92.38,
-        -166.18,
-        1147.93
+        89.17,
+        -160.94,
+        1149.35
       ]
-    },
-    {
-      "id": "scans-beschrieb",
-      "name": "Beschrieb",
-      "filename": "Beschrieb.md",
-      "path": "./scans/Beschrieb.md",
-      "url": "./scans/Beschrieb.md",
-      "format": "md",
-      "sizeBytes": 1732,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-23"
     },
     {
       "id": "scans-erhalten-und-verbinden-0-strategie-erhalten-und-verbinden",
@@ -257,7 +270,12 @@
       "sizeBytes": 4079,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        43.89,
+        -84.24,
+        1159.09
+      ]
     },
     {
       "id": "scans-gegenangebot-gegenangebot-dorfstruktur",
@@ -269,7 +287,12 @@
       "sizeBytes": 207662,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        57.85,
+        -104.54,
+        1142.58
+      ]
     },
     {
       "id": "scans-gegenangebot-gegenangebot-nachbarschaft",
@@ -281,7 +304,12 @@
       "sizeBytes": 528606,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        48.04,
+        -116.15,
+        1143.04
+      ]
     },
     {
       "id": "scans-gegenangebot-gegenangebot-parzelle",
@@ -293,7 +321,12 @@
       "sizeBytes": 864278,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        45.45,
+        -101.03,
+        1143.66
+      ]
     },
     {
       "id": "scans-ger-st-der-erinnerung-0-strategie-geru-st-der-erinnerungen",
@@ -369,6 +402,132 @@
       "pointCount": null,
       "crs": null,
       "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-kern-identi-t-0-strategie-kern-identia-t",
+      "name": "0 Strategie Kern Identiät",
+      "filename": "0 Strategie_KERN IDENTIÄT.md",
+      "path": "./scans/KERN IDENTIÄT/0 Strategie_KERN IDENTIÄT.md",
+      "url": "./scans/KERN IDENTIÄT/0 Strategie_KERN IDENTIÄT.md",
+      "format": "md",
+      "sizeBytes": 988,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-kern-identi-t-kern-identit-t-dorfstruktur",
+      "name": "Kern Identität Dorfstruktur",
+      "filename": "KERN IDENTITÄT_DORFSTRUKTUR.mp4",
+      "path": "./scans/KERN IDENTIÄT/KERN IDENTITÄT_DORFSTRUKTUR.mp4",
+      "url": "./scans/KERN IDENTIÄT/KERN IDENTITÄT_DORFSTRUKTUR.mp4",
+      "format": "mp4",
+      "sizeBytes": 421782,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        64.0,
+        -108.08,
+        1142.12
+      ]
+    },
+    {
+      "id": "scans-kern-identi-t-kern-identit-t-nachbarschaft",
+      "name": "Kern Identität Nachbarschaft",
+      "filename": "KERN IDENTITÄT_NACHBARSCHAFT.mp4",
+      "path": "./scans/KERN IDENTIÄT/KERN IDENTITÄT_NACHBARSCHAFT.mp4",
+      "url": "./scans/KERN IDENTIÄT/KERN IDENTITÄT_NACHBARSCHAFT.mp4",
+      "format": "mp4",
+      "sizeBytes": 1244145,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        38.81,
+        -96.86,
+        1144.22
+      ]
+    },
+    {
+      "id": "scans-kern-identi-t-kern-identit-t-parzelle",
+      "name": "Kern Identität Parzelle",
+      "filename": "KERN IDENTITÄT_PARZELLE.mp4",
+      "path": "./scans/KERN IDENTIÄT/KERN IDENTITÄT_PARZELLE.mp4",
+      "url": "./scans/KERN IDENTIÄT/KERN IDENTITÄT_PARZELLE.mp4",
+      "format": "mp4",
+      "sizeBytes": 4350927,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        24.58,
+        -67.47,
+        1161.65
+      ]
+    },
+    {
+      "id": "scans-microtopografien-0-strategie-microtopografien",
+      "name": "0 Strategie Microtopografien",
+      "filename": "0 Strategie_MICROTOPOGRAFIEN.md",
+      "path": "./scans/MICROTOPOGRAFIEN/0 Strategie_MICROTOPOGRAFIEN.md",
+      "url": "./scans/MICROTOPOGRAFIEN/0 Strategie_MICROTOPOGRAFIEN.md",
+      "format": "md",
+      "sizeBytes": 1017,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-microtopografien-microtopografien-dorfstruktur",
+      "name": "Microtopografien Dorfstruktur",
+      "filename": "MICROTOPOGRAFIEN_DORFSTRUKTUR.mp4",
+      "path": "./scans/MICROTOPOGRAFIEN/MICROTOPOGRAFIEN_DORFSTRUKTUR.mp4",
+      "url": "./scans/MICROTOPOGRAFIEN/MICROTOPOGRAFIEN_DORFSTRUKTUR.mp4",
+      "format": "mp4",
+      "sizeBytes": 3555711,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        54.17,
+        -113.31,
+        1142.65
+      ]
+    },
+    {
+      "id": "scans-microtopografien-microtopografien-nachbarschaft",
+      "name": "Microtopografien Nachbarschaft",
+      "filename": "MICROTOPOGRAFIEN_NACHBARSCHAFT.mp4",
+      "path": "./scans/MICROTOPOGRAFIEN/MICROTOPOGRAFIEN_NACHBARSCHAFT.mp4",
+      "url": "./scans/MICROTOPOGRAFIEN/MICROTOPOGRAFIEN_NACHBARSCHAFT.mp4",
+      "format": "mp4",
+      "sizeBytes": 5018310,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        61.6,
+        -95.17,
+        1153.59
+      ]
+    },
+    {
+      "id": "scans-microtopografien-microtopografien-parzelle",
+      "name": "Microtopografien Parzelle",
+      "filename": "MICROTOPOGRAFIEN_PARZELLE.mp4",
+      "path": "./scans/MICROTOPOGRAFIEN/MICROTOPOGRAFIEN_PARZELLE.mp4",
+      "url": "./scans/MICROTOPOGRAFIEN/MICROTOPOGRAFIEN_PARZELLE.mp4",
+      "format": "mp4",
+      "sizeBytes": 4034738,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        45.28,
+        -85.85,
+        1158.31
+      ]
     },
     {
       "id": "scans-raum-bis-blau-0-strategie-raum-bis-blau",
@@ -455,7 +614,12 @@
       "sizeBytes": 67609,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        51.29,
+        -142.1,
+        1141.75
+      ]
     },
     {
       "id": "scans-vom-haus-zum-hortus-vom-haus-zum-hortus-nachbarschaft",
@@ -467,7 +631,12 @@
       "sizeBytes": 130644,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-23"
+      "uploadedAt": "2026-10-23",
+      "location": [
+        42.49,
+        -113.57,
+        1145.1
+      ]
     },
     {
       "id": "scans-vom-haus-zum-hortus-vom-haus-zum-hortus-parzelle",
@@ -479,25 +648,76 @@
       "sizeBytes": 65753,
       "pointCount": null,
       "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        45.3,
+        -84.27,
+        1158.62
+      ]
+    },
+    {
+      "id": "scans-zusammen-an-kommen-0-strategie-zusammen-an-kommen",
+      "name": "0 Strategie Zusammen(an)kommen",
+      "filename": "0 Strategie_ZUSAMMEN(AN)KOMMEN.md",
+      "path": "./scans/ZUSAMMEN(AN)KOMMEN/0 Strategie_ZUSAMMEN(AN)KOMMEN.md",
+      "url": "./scans/ZUSAMMEN(AN)KOMMEN/0 Strategie_ZUSAMMEN(AN)KOMMEN.md",
+      "format": "md",
+      "sizeBytes": 467,
+      "pointCount": null,
+      "crs": null,
       "uploadedAt": "2026-10-23"
     },
     {
-      "id": "scans-haus-zur-laterne",
-      "name": "Haus Zur Laterne",
-      "filename": "haus-zur-laterne.md",
-      "path": "./scans/haus-zur-laterne.md",
-      "url": "./scans/haus-zur-laterne.md",
-      "format": "md",
-      "sizeBytes": 1183,
+      "id": "scans-zusammen-an-kommen-zusammen-an-kommen-dorfstruktur",
+      "name": "Zusammen(an)kommen Dorfstruktur",
+      "filename": "ZUSAMMEN(AN)KOMMEN_DORFSTRUKTUR.mp4",
+      "path": "./scans/ZUSAMMEN(AN)KOMMEN/ZUSAMMEN(AN)KOMMEN_DORFSTRUKTUR.mp4",
+      "url": "./scans/ZUSAMMEN(AN)KOMMEN/ZUSAMMEN(AN)KOMMEN_DORFSTRUKTUR.mp4",
+      "format": "mp4",
+      "sizeBytes": 448194,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-14",
+      "uploadedAt": "2026-10-23",
       "location": [
-        115.19,
-        -87.09,
-        1152.29
+        53.9,
+        -115.69,
+        1145.66
+      ]
+    },
+    {
+      "id": "scans-zusammen-an-kommen-zusammen-an-kommen-nachbarschaft",
+      "name": "Zusammen(an)kommen Nachbarschaft",
+      "filename": "ZUSAMMEN(AN)KOMMEN_NACHBARSCHAFT.mp4",
+      "path": "./scans/ZUSAMMEN(AN)KOMMEN/ZUSAMMEN(AN)KOMMEN_NACHBARSCHAFT.mp4",
+      "url": "./scans/ZUSAMMEN(AN)KOMMEN/ZUSAMMEN(AN)KOMMEN_NACHBARSCHAFT.mp4",
+      "format": "mp4",
+      "sizeBytes": 6383835,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        -91.83,
+        -49.84,
+        1143.98
+      ]
+    },
+    {
+      "id": "scans-zusammen-an-kommen-zusammen-an-kommen-parzelle",
+      "name": "Zusammen(an)kommen Parzelle",
+      "filename": "ZUSAMMEN(AN)KOMMEN_PARZELLE.mp4",
+      "path": "./scans/ZUSAMMEN(AN)KOMMEN/ZUSAMMEN(AN)KOMMEN_PARZELLE.mp4",
+      "url": "./scans/ZUSAMMEN(AN)KOMMEN/ZUSAMMEN(AN)KOMMEN_PARZELLE.mp4",
+      "format": "mp4",
+      "sizeBytes": 3946655,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        210.77,
+        -140.44,
+        1130.7
       ]
     }
   ],
-  "locationsApplied": "2026-10-23-113740.json"
+  "locationsApplied": "2026-10-23-141046.json"
 }
