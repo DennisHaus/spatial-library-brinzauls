@@ -2,6 +2,66 @@
   "version": 1,
   "scans": [
     {
+      "id": "scans-0-brinzauls-years-brinzauls-years-2020-brienzauls",
+      "name": "Brinzauls Years 2020 Brienzauls",
+      "filename": "Brinzauls Years_2020 Brienzauls.copc.laz",
+      "path": "./scans/0 Brinzauls Years/Brinzauls Years_2020 Brienzauls.copc.laz",
+      "url": "./scans/0 Brinzauls Years/Brinzauls Years_2020 Brienzauls.copc.laz",
+      "format": "copc",
+      "sizeBytes": 100780397,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-0-brinzauls-years-brinzauls-years-2021-brienzauls",
+      "name": "Brinzauls Years 2021 Brienzauls",
+      "filename": "Brinzauls Years_2021 Brienzauls.copc.laz",
+      "path": "./scans/0 Brinzauls Years/Brinzauls Years_2021 Brienzauls.copc.laz",
+      "url": "./scans/0 Brinzauls Years/Brinzauls Years_2021 Brienzauls.copc.laz",
+      "format": "copc",
+      "sizeBytes": 74694099,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-0-brinzauls-years-brinzauls-years-2023-brienzauls",
+      "name": "Brinzauls Years 2023 Brienzauls",
+      "filename": "Brinzauls Years_2023 Brienzauls.copc.laz",
+      "path": "./scans/0 Brinzauls Years/Brinzauls Years_2023 Brienzauls.copc.laz",
+      "url": "./scans/0 Brinzauls Years/Brinzauls Years_2023 Brienzauls.copc.laz",
+      "format": "copc",
+      "sizeBytes": 83490243,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-0-brinzauls-years-brinzauls-years-2025-brienzauls",
+      "name": "Brinzauls Years 2025 Brienzauls",
+      "filename": "Brinzauls Years_2025 Brienzauls.copc.laz",
+      "path": "./scans/0 Brinzauls Years/Brinzauls Years_2025 Brienzauls.copc.laz",
+      "url": "./scans/0 Brinzauls Years/Brinzauls Years_2025 Brienzauls.copc.laz",
+      "format": "copc",
+      "sizeBytes": 86183159,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-0-brinzauls-years-brinzauls-years-2025-brinzauls-color",
+      "name": "Brinzauls Years 2025 Brinzauls Color",
+      "filename": "Brinzauls Years_2025_Brinzauls_color.copc.laz",
+      "path": "./scans/0 Brinzauls Years/Brinzauls Years_2025_Brinzauls_color.copc.laz",
+      "url": "./scans/0 Brinzauls Years/Brinzauls Years_2025_Brinzauls_color.copc.laz",
+      "format": "copc",
+      "sizeBytes": 97940720,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
       "id": "scans-brienz-blicken-brienz-blicken-dorfstruktur",
       "name": "Brienz Blicken Dorfstruktur",
       "filename": "BRIENZ BLICKEN_DORFSTRUKTUR.mp4",
@@ -53,104 +113,68 @@
       ]
     },
     {
-      "id": "scans-brinzauls-years-2020-brienzauls",
-      "name": "2020 Brienzauls",
-      "filename": "2020 Brienzauls.copc.laz",
-      "path": "./scans/Brinzauls Years/2020 Brienzauls.copc.laz",
-      "url": "./scans/Brinzauls Years/2020 Brienzauls.copc.laz",
-      "format": "copc",
-      "sizeBytes": 100780397,
+      "id": "scans-beschrieb",
+      "name": "Beschrieb",
+      "filename": "Beschrieb.md",
+      "path": "./scans/Beschrieb.md",
+      "url": "./scans/Beschrieb.md",
+      "format": "md",
+      "sizeBytes": 1732,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-09-29"
+      "uploadedAt": "2026-10-23"
     },
     {
-      "id": "scans-brinzauls-years-2021-brienzauls",
-      "name": "2021 Brienzauls",
-      "filename": "2021 Brienzauls.copc.laz",
-      "path": "./scans/Brinzauls Years/2021 Brienzauls.copc.laz",
-      "url": "./scans/Brinzauls Years/2021 Brienzauls.copc.laz",
-      "format": "copc",
-      "sizeBytes": 74694099,
+      "id": "scans-ger-st-der-erinnerung-ger-st-der-erinnerung-dorfstruktur",
+      "name": "Gerüst Der Erinnerung Dorfstruktur",
+      "filename": "GERÜST DER ERINNERUNG_DORFSTRUKTUR.mp4",
+      "path": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_DORFSTRUKTUR.mp4",
+      "url": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_DORFSTRUKTUR.mp4",
+      "format": "mp4",
+      "sizeBytes": 9463185,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-09-29"
+      "uploadedAt": "2026-10-23"
     },
     {
-      "id": "scans-brinzauls-years-2023-brienzauls",
-      "name": "2023 Brienzauls",
-      "filename": "2023 Brienzauls.copc.laz",
-      "path": "./scans/Brinzauls Years/2023 Brienzauls.copc.laz",
-      "url": "./scans/Brinzauls Years/2023 Brienzauls.copc.laz",
-      "format": "copc",
-      "sizeBytes": 83490243,
+      "id": "scans-ger-st-der-erinnerung-ger-st-der-erinnerung-nachbarschaft",
+      "name": "Gerüst Der Erinnerung Nachbarschaft",
+      "filename": "GERÜST DER ERINNERUNG_NACHBARSCHAFT.mp4",
+      "path": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_NACHBARSCHAFT.mp4",
+      "url": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_NACHBARSCHAFT.mp4",
+      "format": "mp4",
+      "sizeBytes": 8694748,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-09-29"
+      "uploadedAt": "2026-10-23"
     },
     {
-      "id": "scans-brinzauls-years-2025-brienzauls",
-      "name": "2025 Brienzauls",
-      "filename": "2025 Brienzauls.copc.laz",
-      "path": "./scans/Brinzauls Years/2025 Brienzauls.copc.laz",
-      "url": "./scans/Brinzauls Years/2025 Brienzauls.copc.laz",
-      "format": "copc",
-      "sizeBytes": 86183159,
+      "id": "scans-ger-st-der-erinnerung-ger-st-der-erinnerung-szenarien",
+      "name": "Gerüst Der Erinnerung Szenarien",
+      "filename": "GERÜST DER ERINNERUNG_SZENARIEN.mp4",
+      "path": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_SZENARIEN.mp4",
+      "url": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_SZENARIEN.mp4",
+      "format": "mp4",
+      "sizeBytes": 5618614,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-09-29"
+      "uploadedAt": "2026-10-23"
     },
     {
-      "id": "scans-brinzauls-years-2025-brinzauls-color",
-      "name": "2025 Brinzauls Color",
-      "filename": "2025_Brinzauls_color.copc.laz",
-      "path": "./scans/Brinzauls Years/2025_Brinzauls_color.copc.laz",
-      "url": "./scans/Brinzauls Years/2025_Brinzauls_color.copc.laz",
-      "format": "copc",
-      "sizeBytes": 97940720,
+      "id": "scans-raum-bis-blau-raum-bis-blau-beschrieb",
+      "name": "Raum Bis Blau Beschrieb",
+      "filename": "RAUM BIS BLAU_BESCHRIEB.txt",
+      "path": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_BESCHRIEB.txt",
+      "url": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_BESCHRIEB.txt",
+      "format": "txt",
+      "sizeBytes": 496,
       "pointCount": null,
       "crs": null,
-      "uploadedAt": "2026-10-02"
-    },
-    {
-      "id": "scans-brinzauls-years-2026-brinzauls-allscans-15mio",
-      "name": "2026 Brinzauls Allscans 15mio",
-      "filename": "2026_Brinzauls_AllScans_15Mio.copc.laz",
-      "path": "./scans/Brinzauls Years/2026_Brinzauls_AllScans_15Mio.copc.laz",
-      "url": "./scans/Brinzauls Years/2026_Brinzauls_AllScans_15Mio.copc.laz",
-      "format": "copc",
-      "sizeBytes": 96181501,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-22"
-    },
-    {
-      "id": "scans-brinzauls-years-2058-brienzauls",
-      "name": "2058 Brienzauls",
-      "filename": "2058_Brienzauls.copc.laz",
-      "path": "./scans/Brinzauls Years/2058_Brienzauls.copc.laz",
-      "url": "./scans/Brinzauls Years/2058_Brienzauls.copc.laz",
-      "format": "copc",
-      "sizeBytes": 101197035,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-09-30"
-    },
-    {
-      "id": "scans-moosjungfer",
-      "name": "Moosjungfer",
-      "filename": "Moosjungfer.wav",
-      "path": "./scans/Moosjungfer.wav",
-      "url": "./scans/Moosjungfer.wav",
-      "format": "wav",
-      "sizeBytes": 3751656,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-14",
+      "uploadedAt": "2026-10-23",
       "location": [
-        258.29,
-        -235.55,
-        1116.61
+        46.65,
+        -100.23,
+        1143.52
       ]
     },
     {
@@ -171,6 +195,23 @@
       ]
     },
     {
+      "id": "scans-raum-bis-blau-raum-bis-blau-konzept",
+      "name": "Raum Bis Blau Konzept",
+      "filename": "RAUM BIS BLAU_KONZEPT.jpeg",
+      "path": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_KONZEPT.jpeg",
+      "url": "./scans/RAUM BIS BLAU/RAUM BIS BLAU_KONZEPT.jpeg",
+      "format": "jpg",
+      "sizeBytes": 367775,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        47.64,
+        -92.82,
+        1156.24
+      ]
+    },
+    {
       "id": "scans-raum-bis-blau-raum-bis-blau-nachbarschaft",
       "name": "Raum Bis Blau Nachbarschaft",
       "filename": "RAUM BIS BLAU_NACHBARSCHAFT.mp4",
@@ -182,9 +223,9 @@
       "crs": null,
       "uploadedAt": "2026-10-23",
       "location": [
-        51.68,
-        -93.44,
-        1144.07
+        54.98,
+        -87.63,
+        1145.09
       ]
     },
     {
@@ -199,9 +240,9 @@
       "crs": null,
       "uploadedAt": "2026-10-23",
       "location": [
-        44.98,
-        -92.35,
-        1156.48
+        43.51,
+        -85.46,
+        1159.19
       ]
     },
     {
@@ -222,5 +263,5 @@
       ]
     }
   ],
-  "locationsApplied": "2026-10-23-095822.json"
+  "locationsApplied": "2026-10-23-104829.json"
 }
