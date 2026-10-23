@@ -913,8 +913,45 @@ function fetchCatalogEntries(
       return flattenCatalogEntries(
         entries,
         ""
-      );
+      ).filter(function (scan) {
+        return !isInHiddenFolder(scan);
+      });
     });
+}
+
+/*
+  Files inside a folder whose name starts with "_" (for example
+  scans/Haus/_media/foto.jpg) are not shown in the library. They can
+  still be embedded in Markdown files. Applies to catalog.json and to
+  the live R2 list alike.
+*/
+function isInHiddenFolder(
+  scan
+) {
+  var path =
+    String(
+      (scan && (scan.path || scan.url)) || ""
+    )
+      .split(/[?#]/)[0]
+      .replace(/^https?:\/\/[^/]+/i, "");
+
+  var folders =
+    path.split("/").slice(0, -1);
+
+  if (scan && scan.folderPath) {
+    folders =
+      folders.concat(String(scan.folderPath).split("/"));
+  }
+
+  return folders.some(function (part) {
+    try {
+      part = decodeURIComponent(part);
+    } catch (error) {
+      /* Keep the raw name if it is not valid URL encoding */
+    }
+
+    return /^_/.test(part.trim());
+  });
 }
 
 function catalogPathKey(
