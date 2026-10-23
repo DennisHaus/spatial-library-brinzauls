@@ -149,6 +149,18 @@
       "uploadedAt": "2026-10-23"
     },
     {
+      "id": "scans-ger-st-der-erinnerung-ger-st-der-erinnerung-parzelle",
+      "name": "Gerüst Der Erinnerung Parzelle",
+      "filename": "GERÜST DER ERINNERUNG_PARZELLE.mp4",
+      "path": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_PARZELLE.mp4",
+      "url": "./scans/GERÜST DER ERINNERUNG/GERÜST DER ERINNERUNG_PARZELLE.mp4",
+      "format": "mp4",
+      "sizeBytes": 8289012,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
       "id": "scans-ger-st-der-erinnerung-ger-st-der-erinnerung-szenarien",
       "name": "Gerüst Der Erinnerung Szenarien",
       "filename": "GERÜST DER ERINNERUNG_SZENARIEN.mp4",
@@ -172,9 +184,9 @@
       "crs": null,
       "uploadedAt": "2026-10-23",
       "location": [
-        46.65,
-        -100.23,
-        1143.52
+        49.34,
+        -89.07,
+        1147.67
       ]
     },
     {
@@ -263,5 +275,5 @@
       ]
     }
   ],
-  "locationsApplied": "2026-10-23-104829.json"
+  "locationsApplied": "2026-10-23-105333.json"
 }
