@@ -14,6 +14,7 @@
   Shift + Cmd/Ctrl-click on an icon removes the location.
   The icons button or the P key cycles through three modes:
     all     - every icon is shown
+    colors  - every icon is shown, colored by its folder
     folders - only icons whose folder is expanded in the library
               (icons outside any folder are always shown)
     none    - no icons
@@ -45,7 +46,21 @@
   var layer = null;
   var bar = null;
   var frame = null;
-  var MODES = ["all", "folders", "none"];
+  var MODES = ["all", "colors", "folders", "none"];
+
+  /* Folder colors: distinct, but soft enough for a dark point cloud */
+  var FOLDER_COLORS = [
+    "#6cc4ff", /* sky */
+    "#ffb35c", /* apricot */
+    "#7fdc8f", /* mint */
+    "#f78fb3", /* rose */
+    "#c3a2ff", /* lavender */
+    "#ffe066", /* butter */
+    "#4fd1c5", /* teal */
+    "#ff7f6e", /* coral */
+    "#a8d672", /* lime */
+    "#9fb4ff"  /* periwinkle */
+  ];
   var mode = readMode();
   var pinElements = new Map();
 
@@ -439,6 +454,7 @@
 
     updateBar();
     updateToggleButton();
+    applyFolderColors();
 
     if (pinElements.size > 0) {
       startLoop();
@@ -545,6 +561,91 @@
 
     /* Media at the top level of the library has no folder to expand */
     return !path || openFolders.has(path);
+  }
+
+  function folderPathOf(scan) {
+    return typeof window.normalizeFolderPath === "function"
+      ? window.normalizeFolderPath(scan.folderPath)
+      : String(scan.folderPath || "");
+  }
+
+  function folderColor(index) {
+    if (index < FOLDER_COLORS.length) {
+      return FOLDER_COLORS[index];
+    }
+
+    /* More folders than colors: spread further hues by the golden angle */
+    return "hsl(" + Math.round((index * 137.508) % 360) + ", 75%, 70%)";
+  }
+
+  /*
+    Same folder, same color. The order comes from all media folders in
+    the catalog, so a folder keeps its color when pins are added.
+  */
+  function applyFolderColors() {
+    var colored =
+      mode === "colors";
+
+    var paths =
+      new Set();
+
+    if (colored) {
+      getCatalog().forEach(function (scan) {
+        var path =
+          isMedia(scan) && folderPathOf(scan);
+
+        if (path) {
+          paths.add(path);
+        }
+      });
+    }
+
+    var order =
+      Array.from(paths).sort();
+
+    pinElements.forEach(function (entry) {
+      var element =
+        entry.element;
+
+      var path =
+        colored ? folderPathOf(entry.scan) : "";
+
+      var label =
+        element.querySelector(".media-pin-label");
+
+      var folderLine =
+        label && label.querySelector(".media-pin-folder");
+
+      if (folderLine) {
+        folderLine.remove();
+      }
+
+      /* Media at the top level of the library stays white */
+      if (!path) {
+        element.classList.remove("is-colored");
+        element.style.removeProperty("--pin-color");
+        return;
+      }
+
+      element.classList.add("is-colored");
+      element.style.setProperty(
+        "--pin-color",
+        folderColor(order.indexOf(path))
+      );
+
+      if (label) {
+        folderLine =
+          document.createElement("span");
+
+        folderLine.className =
+          "media-pin-folder";
+
+        folderLine.textContent =
+          path.split("/").pop();
+
+        label.appendChild(folderLine);
+      }
+    });
   }
 
   function loop() {
@@ -889,6 +990,7 @@
 
     button.textContent = {
       all: "Icons: All",
+      colors: "Icons: By Folder",
       folders: "Icons: Open Folders",
       none: "Icons: Hidden"
     }[mode];
@@ -904,10 +1006,12 @@
 
     writeMode();
     updateToggleButton();
+    applyFolderColors();
     updatePins();
 
     status({
       all: "All media icons shown",
+      colors: "Media icons colored by folder",
       folders: "Media icons shown for expanded folders only",
       none: "Media icons hidden"
     }[mode]);

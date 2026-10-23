@@ -2535,60 +2535,144 @@ button:active {
   position: absolute;
   z-index: 16;
 
-  /* Sits just above the viewer toolbar */
-  bottom: 64px;
+  /* Sits just above the viewer toolbar, no box around it */
+  bottom: 62px;
   left: 50%;
 
-  width: min(640px, calc(100% - 32px));
-  padding: 10px 14px 6px;
+  width: min(620px, calc(100% - 80px));
 
   transform: translateX(-50%);
 
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.82);
+  pointer-events: none;
 }
 
 .timeline-panel.hidden {
   display: none;
 }
 
-.timeline-slider {
-  display: block;
+/* The whole strip is the hit area; the visible line is 1px */
+.timeline-track {
+  position: relative;
 
-  width: 100%;
-  margin: 0;
+  height: 34px;
 
-  accent-color: var(--accent-strong);
   cursor: pointer;
+  touch-action: none;
+  pointer-events: auto;
 }
 
-.timeline-stops {
+.timeline-track:focus-visible {
+  outline: none;
+}
+
+.timeline-track:focus-visible .timeline-line {
+  background: #ffffff;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 11px;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+}
+
+.timeline-tick {
+  position: absolute;
+  top: 0;
+
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
 
-  margin-top: 4px;
+  transform: translateX(-50%);
 }
 
-.timeline-stop {
-  min-height: 0;
-  padding: 2px 4px;
+.timeline-mark {
+  width: 1px;
+  height: 9px;
+  margin-top: 7px;
 
-  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
 
-  color: var(--muted);
-  background: none;
+  transition: height 0.12s ease, margin-top 0.12s ease;
+}
+
+.timeline-tick-all .timeline-mark {
+  height: 5px;
+  margin-top: 9px;
+}
+
+.timeline-label {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: 0 0 4px #000000, 0 0 2px #000000;
 
   font-size: 10px;
   letter-spacing: 0.06em;
-  cursor: pointer;
+  white-space: nowrap;
 }
 
-.timeline-stop:hover,
-.timeline-stop.is-active {
-  color: var(--accent-strong);
-  background: none;
+/* The selected year: a taller, brighter tick */
+.timeline-tick.is-active .timeline-mark {
+  width: 3px;
+  height: 21px;
+  margin-top: 1px;
+
+  background: #ffffff;
 }
 
-.timeline-stop:focus-visible {
-  outline: 1px solid var(--border-light);
+.timeline-tick.is-active .timeline-label {
+  color: #ffffff;
+}
+
+.timeline-track:hover .timeline-tick:not(.is-active) .timeline-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-mark {
+    transition: none;
+  }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* ICONS COLORED BY FOLDER                                                    */
+/* -------------------------------------------------------------------------- */
+
+.media-pin.is-colored {
+  border-color: var(--pin-color);
+  color: var(--pin-color);
+}
+
+.media-pin.is-colored::after {
+  border-color: var(--pin-color);
+}
+
+.media-pin.is-colored:hover,
+.media-pin.is-colored:focus-visible,
+.media-pin.is-colored.is-current {
+  border-color: var(--pin-color);
+  color: #000000;
+  background: var(--pin-color);
+}
+
+/* The pin sets line-height: 0, which would stack both lines */
+.media-pin.is-colored .media-pin-label {
+  line-height: 1.35;
+}
+
+.media-pin-folder {
+  display: block;
+  margin-top: 1px;
+
+  color: var(--pin-color);
+  font-size: 9px;
 }

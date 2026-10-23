@@ -23,7 +23,6 @@
   var ALL = "all";
 
   var panel = null;
-  var slider = null;
   var stops = null;
   var years = [];
   var current = ALL;
@@ -191,31 +190,79 @@
     panel.className =
       "timeline-panel hidden";
 
+    /* A thin line with one tick per year; the line itself is the slider */
     panel.innerHTML =
-      '<input class="timeline-slider" type="range" min="0" step="1" ' +
+      '<div class="timeline-track" role="slider" tabindex="0" ' +
         'aria-label="Year">' +
-      '<div class="timeline-stops"></div>';
-
-    slider =
-      panel.querySelector(".timeline-slider");
+        '<div class="timeline-line"></div>' +
+      '</div>';
 
     stops =
-      panel.querySelector(".timeline-stops");
+      panel.querySelector(".timeline-track");
 
-    slider.addEventListener("input", function () {
-      setYear(valueList()[Number(slider.value)]);
+    var dragging =
+      false;
+
+    function pickAt(clientX) {
+      var rect =
+        stops.getBoundingClientRect();
+
+      var values =
+        valueList();
+
+      var ratio =
+        (clientX - rect.left) / Math.max(rect.width, 1);
+
+      var index =
+        Math.round(Math.min(Math.max(ratio, 0), 1) * (values.length - 1));
+
+      if (values[index] !== current) {
+        setYear(values[index]);
+      }
+    }
+
+    stops.addEventListener("pointerdown", function (event) {
+      dragging = true;
+      stops.setPointerCapture(event.pointerId);
+      pickAt(event.clientX);
     });
 
-    stops.addEventListener("click", function (event) {
-      var stop =
-        event.target.closest("[data-year]");
-
-      if (stop) {
-        setYear(stop.dataset.year);
+    stops.addEventListener("pointermove", function (event) {
+      if (dragging) {
+        pickAt(event.clientX);
       }
     });
 
-    /* Keep clicks and drags from reaching the 3D viewer */
+    ["pointerup", "pointercancel"].forEach(function (type) {
+      stops.addEventListener(type, function () {
+        dragging = false;
+      });
+    });
+
+    stops.addEventListener("keydown", function (event) {
+      var values =
+        valueList();
+
+      var index =
+        values.indexOf(current);
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+        index -= 1;
+      } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+        index += 1;
+      } else if (event.key === "Home") {
+        index = 0;
+      } else if (event.key === "End") {
+        index = values.length - 1;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      setYear(values[Math.min(Math.max(index, 0), values.length - 1)]);
+    });
+
+    /* Keep clicks, drags and arrow keys from reaching the 3D viewer */
     ["pointerdown", "wheel", "keydown"].forEach(function (type) {
       panel.addEventListener(type, function (event) {
         event.stopPropagation();
@@ -238,21 +285,31 @@
       current = ALL;
     }
 
-    slider.max =
-      String(values.length - 1);
+    stops.querySelectorAll(".timeline-tick").forEach(function (tick) {
+      tick.remove();
+    });
 
-    stops.innerHTML = "";
+    values.forEach(function (value, index) {
+      var tick =
+        document.createElement("div");
 
-    values.forEach(function (value) {
-      var stop =
-        document.createElement("button");
+      tick.className =
+        "timeline-tick" + (value === ALL ? " timeline-tick-all" : "");
 
-      stop.type = "button";
-      stop.className = "timeline-stop";
-      stop.dataset.year = value;
-      stop.textContent = value === ALL ? "All" : value;
+      tick.dataset.year = value;
 
-      stops.appendChild(stop);
+      /* Even spacing, so close years stay readable */
+      tick.style.left =
+        (values.length > 1 ? index / (values.length - 1) * 100 : 50) + "%";
+
+      tick.innerHTML =
+        '<span class="timeline-mark"></span>' +
+        '<span class="timeline-label"></span>';
+
+      tick.querySelector(".timeline-label").textContent =
+        value === ALL ? "All" : value;
+
+      stops.appendChild(tick);
     });
 
     updateStops();
@@ -263,15 +320,13 @@
       return;
     }
 
-    slider.value =
-      String(valueList().indexOf(current));
+    stops.setAttribute(
+      "aria-valuetext",
+      current === ALL ? "All years" : current
+    );
 
-    stops.querySelectorAll(".timeline-stop").forEach(function (stop) {
-      var active =
-        stop.dataset.year === current;
-
-      stop.classList.toggle("is-active", active);
-      stop.setAttribute("aria-pressed", String(active));
+    stops.querySelectorAll(".timeline-tick").forEach(function (tick) {
+      tick.classList.toggle("is-active", tick.dataset.year === current);
     });
   }
 
