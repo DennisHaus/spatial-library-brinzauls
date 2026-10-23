@@ -2,74 +2,6 @@
   "version": 1,
   "scans": [
     {
-      "id": "scans-0-brinzauls-ger-usche-brunnen",
-      "name": "Brunnen",
-      "filename": "Brunnen.WAV",
-      "path": "./scans/0 Brinzauls Geräusche/Brunnen.WAV",
-      "url": "./scans/0 Brinzauls Geräusche/Brunnen.WAV",
-      "format": "wav",
-      "sizeBytes": 2445104,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-23",
-      "location": [
-        60.19,
-        -116.35,
-        1142.27
-      ]
-    },
-    {
-      "id": "scans-0-brinzauls-ger-usche-glocken",
-      "name": "Glocken",
-      "filename": "Glocken.WAV",
-      "path": "./scans/0 Brinzauls Geräusche/Glocken.WAV",
-      "url": "./scans/0 Brinzauls Geräusche/Glocken.WAV",
-      "format": "wav",
-      "sizeBytes": 2392448,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-23",
-      "location": [
-        -8.05,
-        -149.5,
-        1180.16
-      ]
-    },
-    {
-      "id": "scans-0-brinzauls-ger-usche-hund",
-      "name": "Hund",
-      "filename": "Hund.WAV",
-      "path": "./scans/0 Brinzauls Geräusche/Hund.WAV",
-      "url": "./scans/0 Brinzauls Geräusche/Hund.WAV",
-      "format": "wav",
-      "sizeBytes": 1724968,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-23",
-      "location": [
-        126.43,
-        -139.57,
-        1136.22
-      ]
-    },
-    {
-      "id": "scans-0-brinzauls-ger-usche-kuhe",
-      "name": "Kuhe",
-      "filename": "Kuhe.WAV",
-      "path": "./scans/0 Brinzauls Geräusche/Kuhe.WAV",
-      "url": "./scans/0 Brinzauls Geräusche/Kuhe.WAV",
-      "format": "wav",
-      "sizeBytes": 2101264,
-      "pointCount": null,
-      "crs": null,
-      "uploadedAt": "2026-10-23",
-      "location": [
-        -199.91,
-        -84.2,
-        1135.88
-      ]
-    },
-    {
       "id": "scans-0-brinzauls-years-brinzauls-years-2020-brienzauls",
       "name": "Brinzauls Years 2020 Brienzauls",
       "filename": "Brinzauls Years_2020 Brienzauls.copc.laz",
@@ -125,6 +57,54 @@
       "url": "./scans/0 Brinzauls Years/Brinzauls Years_2025_Brinzauls_color.copc.laz",
       "format": "copc",
       "sizeBytes": 97940720,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-1-audio-aufnahmen-0-brinzauls-gera-usche-brunnen",
+      "name": "0 Brinzauls Geräusche Brunnen",
+      "filename": "0 Brinzauls Geräusche_Brunnen.WAV",
+      "path": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Brunnen.WAV",
+      "url": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Brunnen.WAV",
+      "format": "wav",
+      "sizeBytes": 2445104,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-1-audio-aufnahmen-0-brinzauls-gera-usche-glocken",
+      "name": "0 Brinzauls Geräusche Glocken",
+      "filename": "0 Brinzauls Geräusche_Glocken.WAV",
+      "path": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Glocken.WAV",
+      "url": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Glocken.WAV",
+      "format": "wav",
+      "sizeBytes": 2392448,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-1-audio-aufnahmen-0-brinzauls-gera-usche-hund",
+      "name": "0 Brinzauls Geräusche Hund",
+      "filename": "0 Brinzauls Geräusche_Hund.WAV",
+      "path": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Hund.WAV",
+      "url": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Hund.WAV",
+      "format": "wav",
+      "sizeBytes": 1724968,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23"
+    },
+    {
+      "id": "scans-1-audio-aufnahmen-0-brinzauls-gera-usche-kuhe",
+      "name": "0 Brinzauls Geräusche Kuhe",
+      "filename": "0 Brinzauls Geräusche_Kuhe.WAV",
+      "path": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Kuhe.WAV",
+      "url": "./scans/1 Audio Aufnahmen/0 Brinzauls Geräusche_Kuhe.WAV",
+      "format": "wav",
+      "sizeBytes": 2101264,
       "pointCount": null,
       "crs": null,
       "uploadedAt": "2026-10-23"
