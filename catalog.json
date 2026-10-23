@@ -2,6 +2,57 @@
   "version": 1,
   "scans": [
     {
+      "id": "scans-brienz-blicken-brienz-blicken-dorfstruktur",
+      "name": "Brienz Blicken Dorfstruktur",
+      "filename": "BRIENZ BLICKEN_DORFSTRUKTUR.mp4",
+      "path": "./scans/BRIENZ BLICKEN/BRIENZ BLICKEN_DORFSTRUKTUR.mp4",
+      "url": "./scans/BRIENZ BLICKEN/BRIENZ BLICKEN_DORFSTRUKTUR.mp4",
+      "format": "mp4",
+      "sizeBytes": 1432418,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        104.68,
+        -163.46,
+        1141.44
+      ]
+    },
+    {
+      "id": "scans-brienz-blicken-brienz-blicken-nachbarschaft",
+      "name": "Brienz Blicken Nachbarschaft",
+      "filename": "BRIENZ BLICKEN_NACHBARSCHAFT.mp4",
+      "path": "./scans/BRIENZ BLICKEN/BRIENZ BLICKEN_NACHBARSCHAFT.mp4",
+      "url": "./scans/BRIENZ BLICKEN/BRIENZ BLICKEN_NACHBARSCHAFT.mp4",
+      "format": "mp4",
+      "sizeBytes": 1442334,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        97.28,
+        -158.99,
+        1141.28
+      ]
+    },
+    {
+      "id": "scans-brienz-blicken-brienz-blicken-parzelle",
+      "name": "Brienz Blicken Parzelle",
+      "filename": "BRIENZ BLICKEN_PARZELLE.mp4",
+      "path": "./scans/BRIENZ BLICKEN/BRIENZ BLICKEN_PARZELLE.mp4",
+      "url": "./scans/BRIENZ BLICKEN/BRIENZ BLICKEN_PARZELLE.mp4",
+      "format": "mp4",
+      "sizeBytes": 1541605,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-23",
+      "location": [
+        92.38,
+        -166.18,
+        1147.93
+      ]
+    },
+    {
       "id": "scans-brinzauls-years-2020-brienzauls",
       "name": "2020 Brienzauls",
       "filename": "2020 Brienzauls.copc.laz",
@@ -154,5 +205,5 @@
       ]
     }
   ],
-  "locationsApplied": "2026-10-23-092856.json"
+  "locationsApplied": "2026-10-23-095018.json"
 }
