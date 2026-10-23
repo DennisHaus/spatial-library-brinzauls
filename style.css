@@ -2676,3 +2676,41 @@ button:active {
   color: var(--pin-color);
   font-size: 9px;
 }
+
+
+/* -------------------------------------------------------------------------- */
+/* IMAGES IN MARKDOWN POPUPS                                                  */
+/* -------------------------------------------------------------------------- */
+
+.text-popup-markdown .md-image {
+  display: block;
+  margin: 0.4em 0;
+
+  line-height: 0;
+  text-decoration: none;
+  cursor: zoom-in;
+}
+
+.text-popup-markdown .md-image img {
+  display: block;
+
+  max-width: 100%;
+  height: auto;
+
+  border: 1px solid var(--border);
+}
+
+.text-popup-markdown .md-figure {
+  display: block;
+  margin: 0.4em 0 0.9em;
+}
+
+.text-popup-markdown .md-caption {
+  display: block;
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}

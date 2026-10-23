@@ -1368,30 +1368,90 @@ function escapeHtml(value) {
 
 /*
   Small Markdown renderer for text popups: headings, paragraphs,
-  bold, italic, inline code, code blocks, lists, quotes, links and
-  horizontal rules. All text is escaped first, so a file cannot
+  bold, italic, inline code, code blocks, lists, quotes, links, images
+  and horizontal rules. All text is escaped first, so a file cannot
   inject HTML or scripts.
+
+  Images: ![description](picture.jpg) or ![description](picture.jpg "Caption")
+  Relative paths are resolved from the folder of the Markdown file.
 */
-function renderMarkdown(source) {
+function renderMarkdown(source, baseUrl) {
+  var base =
+    new URL(baseUrl || ".", window.location.href);
+
+  /* Only web and relative addresses, never javascript: or data: */
+  function resolveUrl(url) {
+    var plain =
+      url.replace(/&amp;/g, "&");
+
+    if (/^\s*[a-z][a-z0-9+.-]*:/i.test(plain) && !/^\s*https?:/i.test(plain)) {
+      return null;
+    }
+
+    try {
+      /* Spaces in file names may be written as is or as %20 */
+      return escapeHtml(new URL(plain.replace(/ /g, "%20"), base).href);
+    } catch (error) {
+      return null;
+    }
+  }
+
   function inline(text) {
-    return escapeHtml(text)
+    /* Images become tokens first, so the rules below cannot touch them */
+    var images = [];
+
+    var html = escapeHtml(text)
+      .replace(
+        /!\[([^\]]*)\]\(\s*([^)"]+?)\s*(?:&quot;([^)]*?)&quot;)?\s*\)/g,
+        function (match, alt, url, caption) {
+          var src =
+            resolveUrl(url);
+
+          if (!src) {
+            return alt;
+          }
+
+          var image =
+            '<a class="md-image" href="' + src + '" target="_blank" rel="noopener">' +
+              '<img src="' + src + '" alt="' + alt + '" loading="lazy">' +
+            "</a>";
+
+          images.push(
+            caption
+              ? '<span class="md-figure">' + image +
+                  '<span class="md-caption">' + caption + "</span></span>"
+              : image
+          );
+
+          return "\u0000" + (images.length - 1) + "\u0000";
+        }
+      );
+
+    return html
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
       .replace(
-        /\[([^\]]+)\]\(((?:https?:\/\/|\.?\.?\/)?[^\s)]+)\)/g,
-        function (match, label, url) {
-          if (/^\s*javascript:/i.test(url)) {
-            return label;
+        /(^|[^!])\[([^\]]+)\]\(((?:https?:\/\/|\.?\.?\/)?[^\s)]+)\)/g,
+        function (match, before, label, url) {
+          var href =
+            resolveUrl(url);
+
+          if (!href) {
+            return before + label;
           }
 
           return (
-            '<a href="' + url + '" target="_blank" rel="noopener">' +
+            before +
+            '<a href="' + href + '" target="_blank" rel="noopener">' +
             label +
             "</a>"
           );
         }
-      );
+      )
+      .replace(/\u0000(\d+)\u0000/g, function (match, index) {
+        return images[Number(index)];
+      });
   }
 
   var lines =
@@ -1541,7 +1601,7 @@ function loadTextIntoPopup(
     .then(function (text) {
       if (isMarkdownScan(scan)) {
         element.classList.add("text-popup-markdown");
-        element.innerHTML = renderMarkdown(text);
+        element.innerHTML = renderMarkdown(text, scan.url);
       } else {
         element.classList.add("text-popup-plain");
         element.textContent = text;
