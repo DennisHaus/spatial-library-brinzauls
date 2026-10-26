@@ -110,6 +110,30 @@
       "uploadedAt": "2026-10-23"
     },
     {
+      "id": "scans-2026-brinzauls-church",
+      "name": "2026 Brinzauls Church",
+      "filename": "2026_Brinzauls_Church.copc.laz",
+      "path": "./scans/2026_Brinzauls_Church.copc.laz",
+      "url": "./scans/2026_Brinzauls_Church.copc.laz",
+      "format": "copc",
+      "sizeBytes": 81703987,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-26"
+    },
+    {
+      "id": "scans-2026-brinzauls-square",
+      "name": "2026 Brinzauls Square",
+      "filename": "2026_Brinzauls_square.copc.laz",
+      "path": "./scans/2026_Brinzauls_square.copc.laz",
+      "url": "./scans/2026_Brinzauls_square.copc.laz",
+      "format": "copc",
+      "sizeBytes": 79591803,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-26"
+    },
+    {
       "id": "scans-bewahren-und-beleben-0-strategie-bewahren-und-beleben",
       "name": "0 Strategie Bewahren Und Beleben",
       "filename": "0 Strategie_BEWAHREN UND BELEBEN.md",
