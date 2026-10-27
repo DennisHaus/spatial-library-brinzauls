@@ -25,7 +25,7 @@ liveCatalogUrl: "https://brinzauls.wi-251124.workers.dev",
     <br><br>
     See all Places <a
       class="subtitle-link"
-      href="https://dennishaus.github.io/overview"
+      href="x"
       target="_blank"
       rel="noopener"
     >
