@@ -62,6 +62,18 @@
       "uploadedAt": "2026-10-23"
     },
     {
+      "id": "scans-0-brinzauls-years-brinzauls-years-2026",
+      "name": "Brinzauls Years 2026",
+      "filename": "Brinzauls_Years_2026.copc.laz",
+      "path": "./scans/0 Brinzauls Years/Brinzauls_Years_2026.copc.laz",
+      "url": "./scans/0 Brinzauls Years/Brinzauls_Years_2026.copc.laz",
+      "format": "copc",
+      "sizeBytes": 96181501,
+      "pointCount": null,
+      "crs": null,
+      "uploadedAt": "2026-10-28"
+    },
+    {
       "id": "scans-1-audio-aufnahmen-0-brinzauls-gera-usche-brunnen",
       "name": "0 Brinzauls Geräusche Brunnen",
       "filename": "0 Brinzauls Geräusche_Brunnen.WAV",
