@@ -48,7 +48,7 @@ liveCatalogUrl: "https://brinzauls.wi-251124.workers.dev",
   target: [5.885, -75.285, 1176.3]
 },
 
-  navigationMode: "Orbit",
+  navigationMode: "orbit",
 
   /*
     Which side panels are open when the page opens.
